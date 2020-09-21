@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>6161382372-303re131iccd2ao642n1rlqgg0ehqtlr.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.6161382372-303re131iccd2ao642n1rlqgg0ehqtlr</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCcAUZpXJZFoP5kbpupi0D4ucQVIbAxNX4</string>
+	<key>GCM_SENDER_ID</key>
+	<string>6161382372</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>ocul.com.pbas</string>
+	<key>PROJECT_ID</key>
+	<string>path-based-audio-stories-4f2c1</string>
+	<key>STORAGE_BUCKET</key>
+	<string>path-based-audio-stories-4f2c1.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:6161382372:ios:f90118ea5b07359c5065f1</string>
+	<key>DATABASE_URL</key>
+	<string>https://path-based-audio-stories-4f2c1.firebaseio.com</string>
+</dict>
+</plist>

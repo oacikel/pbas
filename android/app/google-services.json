@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "6161382372",
+    "firebase_url": "https://path-based-audio-stories-4f2c1.firebaseio.com",
+    "project_id": "path-based-audio-stories-4f2c1",
+    "storage_bucket": "path-based-audio-stories-4f2c1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:6161382372:android:9861b44c23bbbf315065f1",
+        "android_client_info": {
+          "package_name": "ocul.com.pbas"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "6161382372-c5050imieo4jdd03bae1ja8oegkiu4ea.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBo1856P2UlN9JMzANp6A9GZkFo0Hecfyo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "6161382372-c5050imieo4jdd03bae1ja8oegkiu4ea.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
