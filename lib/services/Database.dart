@@ -26,29 +26,22 @@ class DatabaseService {
     return snapshot.docs.map((doc) {
       Post post = Post (
         title: doc.data()[CONSTANTS.fieldNameTitle].toString() ?? "N/A",
-        categoryReference: doc.data()[CONSTANTS.fieldNameCategoryReference]
-            .toString() ?? "N/A",
-        cityReference: doc.data()[CONSTANTS.fieldNameCityReference]
-            .toString() ?? "N/A",
-        description: doc.data()[CONSTANTS.fieldNameDescription].toString() ??
-            "N/A",
-        pathPhotoLink: doc.data()[CONSTANTS.fieldNamePathPhotoLink]
-            .toString() ?? "N/A",
-        storyPhotoLink: doc.data()[CONSTANTS.fieldNameStoryPhotoLink]
-            .toString() ?? "N/A",
-        uploaderReference: doc.data()[CONSTANTS.fieldNameUploaderReference]
-            .toString() ?? "N/A",
-        estimatedTimeInMinutes: doc.data()[CONSTANTS
-            .fieldNameEstimatedTimeInMinutes] ?? -1,
-        travelDistanceInMeters: doc.data()[CONSTANTS
-            .fieldNameTravelDistanceInMeters] ?? -1,
+        categoryReference: doc.data()[CONSTANTS.fieldNameCategoryReference].toString() ?? "N/A",
+        cityReference: doc.data()[CONSTANTS.fieldNameCityReference].toString() ?? "N/A",
+        description: doc.data()[CONSTANTS.fieldNameDescription].toString() ?? "N/A",
+        pathPhotoLink: doc.data()[CONSTANTS.fieldNamePathPhotoLink].toString() ?? "N/A",
+        storyPhotoLink: doc.data()[CONSTANTS.fieldNameStoryPhotoLink].toString() ?? "N/A",
+        uploaderReference: doc.data()[CONSTANTS.fieldNameUploaderReference].toString() ?? "N/A",
+        estimatedTimeInMinutes: doc.data()[CONSTANTS.fieldNameEstimatedTimeInMinutes] ?? -1,
+        travelDistanceInMeters: doc.data()[CONSTANTS.fieldNameTravelDistanceInMeters] ?? -1,
         user: User(
             userName: "N/A",
             userPictureLink: "https://goster.co/wp-content/uploads/2019/04/n-a-ne-anlama-geliyor.jpg"
         ),
       );
       updatePostWithUser(post).then((value) => post=value);
-return post;
+      debugPrint(LOG_TAG+"2) Created a new post object for "+post.user.userName);
+      return post;
     }).toList();
   }
 
@@ -59,8 +52,9 @@ return post;
         userName: result.data()[CONSTANTS.fieldNameUserName].toString() ?? "N/A",
         userPictureLink: result.data()[CONSTANTS.fieldNameUserPictureLink].toString() ?? "https://goster.co/wp-content/uploads/2019/04/n-a-ne-anlama-geliyor.jpg",);
     }).whenComplete(() => {
-      debugPrint (LOG_TAG +"Updated post: Username is, "+post.user.userName)
+      debugPrint (LOG_TAG +"1)Updated post: Username is, "+post.user.userName)
     });
+
     return post;
   }
 

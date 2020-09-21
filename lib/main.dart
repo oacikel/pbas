@@ -6,6 +6,7 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:pbas/screens/ErrorScreen/ErrorScreen.dart';
 import 'package:pbas/screens/home/Home.dart';
 import 'package:pbas/screens/splashScreen/SplashScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -27,7 +28,7 @@ class MyApp extends StatelessWidget {
           debugPrint('OCULCAN - Main: Error  initializing Firebase '+snapshot.error.toString());  debugPrint("OCULCAN - Main: Please wait");
           return MaterialApp(
               title: "Error screen",
-              home:SplashScreen());
+              home:ErrorScreen());
         }
 
         // Once complete, show your application
@@ -36,7 +37,7 @@ class MyApp extends StatelessWidget {
           return MaterialApp(
               title: 'Welcome to Flutter', home: Home());
         }else{
-          debugPrint("OCULCAN - Main: Please wait");
+          debugPrint("OCULCAN - Main: Starting splash screen");
           return MaterialApp(
             title: "Splash screen",
             home:SplashScreen());
