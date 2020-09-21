@@ -7,8 +7,10 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pbas/screens/home/Home.dart';
+import 'package:pbas/screens/splashScreen/SplashScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
+
 
 void main() => runApp(MyApp());
 
@@ -19,10 +21,13 @@ class MyApp extends StatelessWidget {
     return FutureBuilder(
       // Initialize FlutterFire
       future: Firebase.initializeApp(),
-      builder: (context, snapshot) {
+      builder: (context, snapshot)  {
         // Check for errors
         if (snapshot.hasError) {
-          debugPrint('OCULCAN - Main: Error  initializing Firebase '+snapshot.error.toString());
+          debugPrint('OCULCAN - Main: Error  initializing Firebase '+snapshot.error.toString());  debugPrint("OCULCAN - Main: Please wait");
+          return MaterialApp(
+              title: "Error screen",
+              home:SplashScreen());
         }
 
         // Once complete, show your application
@@ -30,9 +35,12 @@ class MyApp extends StatelessWidget {
           debugPrint('OCULCAN - Main: Initializing HomeScreen');
           return MaterialApp(
               title: 'Welcome to Flutter', home: Home());
+        }else{
+          debugPrint("OCULCAN - Main: Please wait");
+          return MaterialApp(
+            title: "Splash screen",
+            home:SplashScreen());
         }
-        // Add a  splash screen here
-        debugPrint("OCULCAN - Main: Please wait");
       },
     );
   }

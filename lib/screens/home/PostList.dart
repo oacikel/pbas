@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:pbas/model/Post.dart';
-import 'package:pbas/widgets/PostTile.dart';
+import 'package:pbas/screens/home/PostTile.dart';
 
 
 class PostList extends StatefulWidget {
