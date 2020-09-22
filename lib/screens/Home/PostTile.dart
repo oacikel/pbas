@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "package:pbas/model/Post.dart";
 import "package:pbas/model/CONSTANTS.dart" as CONSTANTS;
 import 'package:pbas/helper/DialogHelper.dart';
+import 'package:pbas/screens/MapScreen/MapScreen.dart';
 
 class PostTile extends StatelessWidget {
 
@@ -100,8 +101,9 @@ class PostTile extends StatelessWidget {
                         Expanded(
                           flex: 1,
                           child: RaisedButton(
-
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => MapScreen()));
+                            },
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(18.0)
                             ),
