@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import "package:pbas/model/CONSTANTS.dart" as CONSTANTS;
 import "package:pbas/model/Post.dart";
 import 'package:pbas/model/User.dart';
+import 'package:pbas/model/Story.dart';
 
 class DatabaseService {
   static String LOG_TAG ="OCULCAN - DATABASE: ";
@@ -38,9 +39,9 @@ class DatabaseService {
             userName: "N/A",
             userPictureLink: "https://goster.co/wp-content/uploads/2019/04/n-a-ne-anlama-geliyor.jpg"
         ),
+        story: createStoryFromDoc(doc)
       );
       updatePostWithUser(post).then((value) => post=value);
-      debugPrint(LOG_TAG+"2) Created a new post object for "+post.user.userName);
       return post;
     }).toList();
   }
@@ -52,10 +53,29 @@ class DatabaseService {
         userName: result.data()[CONSTANTS.fieldNameUserName].toString() ?? "N/A",
         userPictureLink: result.data()[CONSTANTS.fieldNameUserPictureLink].toString() ?? "https://goster.co/wp-content/uploads/2019/04/n-a-ne-anlama-geliyor.jpg",);
     }).whenComplete(() => {
-      debugPrint (LOG_TAG +"1)Updated post: Username is, "+post.user.userName)
     });
 
     return post;
   }
+
+  Story createStoryFromDoc(QueryDocumentSnapshot doc) {
+    debugPrint(LOG_TAG+"Adding a story to Post");
+    return Story(
+       storyStops:
+       List.from(doc.data()[CONSTANTS.fieldNameStoryStops])
+       );
+ }
+
+ /*
+ GameRecord.fromSnapshot(DocumentSnapshot snapshot)
+      : documentID = snapshot.documentID,
+        name = snapshot['name'],
+        creationTimestamp = snapshot['creationTimestamp'],
+        ratings = List.from(snapshot['ratings']),
+        players = List.from(snapshot['players']),
+        gameReview = GameReview.fromMap(snapshot['gameReview']);
+  */
+
+
 
 }

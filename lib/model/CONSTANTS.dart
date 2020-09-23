@@ -25,6 +25,7 @@ const String fieldNameStoryPhotoLink="storyPhotoLink";
 const String fieldNameUploaderReference="uploader";
 const String fieldNameEstimatedTimeInMinutes="estimatedTimeInMinutes";
 const String fieldNameTravelDistanceInMeters="travelDistanceInMeters";
+const String fieldNameStoryStops="storyStops";
 
 //User Fields
 const String fieldNameUserName="userName";

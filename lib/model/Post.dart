@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:pbas/model/User.dart';
 
+import 'Story.dart';
+
 class Post {
   final String title;
   final String categoryReference;
@@ -12,6 +14,7 @@ class Post {
   final int estimatedTimeInMinutes;
   final int travelDistanceInMeters;
    User user;
+   Story story;
 
   Post(
       {this.title,
@@ -23,6 +26,7 @@ class Post {
       this.uploaderReference,
       this.estimatedTimeInMinutes,
       this.travelDistanceInMeters,
-      this.user
+      this.user,
+      this.story
       });
 }

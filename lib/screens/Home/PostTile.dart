@@ -102,7 +102,7 @@ class PostTile extends StatelessWidget {
                           flex: 1,
                           child: RaisedButton(
                             onPressed: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => MapScreen()));
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => MapScreen(post: post,)));
                             },
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(18.0)
