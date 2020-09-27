@@ -3,9 +3,11 @@ library CONSTANTS;
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:pbas/screens/MapScreen/MapScreen.dart';
 
 //Style
 final styleBiggerFont = TextStyle(fontSize: 18.0, color: Colors.white);
+final styleHugeFontBlack = TextStyle(fontSize: 36.0, color: Colors.black);
 final styleNormalFont = TextStyle(fontSize: 12.0, color: Colors.white);
 
 //Firebase
@@ -30,3 +32,6 @@ const String fieldNameStoryStops="storyStops";
 //User Fields
 const String fieldNameUserName="userName";
 const String fieldNameUserPictureLink="userPictureLink";
+
+//Google MapScreen
+const String googleMapsAPIKey ="AIzaSyBZ-aAK6hvmyJT_LiGTC3BVaWM7LO3FEYc";

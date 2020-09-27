@@ -32,6 +32,7 @@ class _HomeState extends State<Home> {
                     .size
                     .height / 2.0,
                 child: PostList())]),
+        
       ),
     );
   }

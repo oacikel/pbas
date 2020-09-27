@@ -24,6 +24,10 @@ dependencies:
   cloud_firestore: ^0.14.0+2
   firebase_auth: ^0.18.0+1
   provider: ^3.1.0
+  permission: ^0.1.7
+  permission_handler: ^5.0.1+1
+  geolocator: ^6.0.0+4
+  flutter_polyline_points: ^0.2.3
 
   flutter:
     sdk: flutter

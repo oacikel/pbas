@@ -3,12 +3,14 @@ import "package:pbas/model/Post.dart";
 import "package:pbas/model/CONSTANTS.dart" as CONSTANTS;
 import 'package:pbas/helper/DialogHelper.dart';
 import 'package:pbas/screens/MapScreen/MapScreen.dart';
+import "package:permission_handler/permission_handler.dart";
 
 class PostTile extends StatelessWidget {
-
+  static String LOG_TAG ="OCULCAN - PostTile: ";
   final Post post;
   PostTile({this.post});
   BuildContext context;
+  String permissionStatusMessage;
 
 
   @override
@@ -102,7 +104,8 @@ class PostTile extends StatelessWidget {
                           flex: 1,
                           child: RaisedButton(
                             onPressed: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => MapScreen(post: post,)));
+                              getSinglePermissionStatus().whenComplete(() => Navigator.push(context, MaterialPageRoute(builder: (context) => MapScreen(post: post,))));
+
                             },
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(18.0)
@@ -122,4 +125,14 @@ class PostTile extends StatelessWidget {
       ),
     );
   }
+
+  Future getSinglePermissionStatus() async {
+    if (!await Permission.location.isGranted) {
+      Map<Permission, PermissionStatus> statuses = await [
+        Permission.location,
+      ].request();
+      debugPrint(LOG_TAG+" "+statuses[Permission.location].toString());
+    }
+  }
+
 }

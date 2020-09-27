@@ -6,4 +6,7 @@ firebase_auth_web=/Users/oacikel/Developer/flutter/.pub-cache/hosted/pub.dartlan
 firebase_core=/Users/oacikel/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core-0.5.0/
 firebase_core_web=/Users/oacikel/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core_web-0.2.0/
 flutter_plugin_android_lifecycle=/Users/oacikel/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_plugin_android_lifecycle-1.0.9/
+geolocator=/Users/oacikel/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/geolocator-6.0.0+4/
 google_maps_flutter=/Users/oacikel/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/google_maps_flutter-0.5.32/
+permission=/Users/oacikel/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/permission-0.1.7/
+permission_handler=/Users/oacikel/Developer/flutter/.pub-cache/hosted/pub.dartlang.org/permission_handler-5.0.1+1/
