@@ -44,7 +44,7 @@ class PostTile extends StatelessWidget {
                   Container(
                     padding: EdgeInsets.only(bottom: 15),
                     child: Text(post.title,
-                      style: CONSTANTS.styleBiggerFont,),
+                      style: CONSTANTS.styleBigFontWhite,),
                   ),
                   Container(
                     alignment: Alignment.centerLeft,

@@ -13,7 +13,6 @@ class _PostListState extends State<PostList> {
   @override
   Widget build(BuildContext context) {
     final posts = Provider.of<List<Post>>(context);
-    //debugPrint("OCULCAN - PostList: "+"PostList size: "+posts.length.toString());
     return ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: posts.length,

@@ -2,6 +2,7 @@ import "package:cloud_firestore/cloud_firestore.dart";
 import 'package:flutter/cupertino.dart';
 import "package:pbas/model/CONSTANTS.dart" as CONSTANTS;
 import "package:pbas/model/Post.dart";
+import 'package:pbas/model/StoryStop.dart';
 import 'package:pbas/model/User.dart';
 import 'package:pbas/model/Story.dart';
 
@@ -23,7 +24,7 @@ class DatabaseService {
   }
 
   //Post List From Snapshot
-   List<Post> _postListFromSnapshot (QuerySnapshot snapshot){
+   List<Post> _postListFromSnapshot (QuerySnapshot snapshot) {
     return snapshot.docs.map((doc) {
       Post post = Post (
         title: doc.data()[CONSTANTS.fieldNameTitle].toString() ?? "N/A",
@@ -53,29 +54,25 @@ class DatabaseService {
         userName: result.data()[CONSTANTS.fieldNameUserName].toString() ?? "N/A",
         userPictureLink: result.data()[CONSTANTS.fieldNameUserPictureLink].toString() ?? "https://goster.co/wp-content/uploads/2019/04/n-a-ne-anlama-geliyor.jpg",);
     }).whenComplete(() => {
+
     });
 
     return post;
   }
-
+/*
+List<Weight> weightData =
+  mapData.entries.map( (entry) => Weight(entry.key, entry.value)).toList();
+ */
   Story createStoryFromDoc(QueryDocumentSnapshot doc) {
+    List<StoryStop> storyStops=[];
     debugPrint(LOG_TAG+"Adding a story to Post");
+    List<Map> storyStopMaps =List.from(doc.data()[CONSTANTS.fieldNameStoryStops]);
+    storyStopMaps.forEach((map) {
+      StoryStop storyStop=StoryStop.fromMap(map);
+      storyStops.add(storyStop);
+    });
     return Story(
-       storyStops:
-       List.from(doc.data()[CONSTANTS.fieldNameStoryStops])
+       storyStops:storyStops
        );
- }
-
- /*
- GameRecord.fromSnapshot(DocumentSnapshot snapshot)
-      : documentID = snapshot.documentID,
-        name = snapshot['name'],
-        creationTimestamp = snapshot['creationTimestamp'],
-        ratings = List.from(snapshot['ratings']),
-        players = List.from(snapshot['players']),
-        gameReview = GameReview.fromMap(snapshot['gameReview']);
-  */
-
-
-
+  }
 }

@@ -23,7 +23,7 @@ class DialogHelper {
                     padding: EdgeInsets.fromLTRB(15, 15, 15, 5),
                     child: Text(
                       post.title,
-                      style: CONSTANTS.styleBiggerFont,
+                      style: CONSTANTS.styleBigFontWhite,
                     )),
                 //Description
                 Padding(

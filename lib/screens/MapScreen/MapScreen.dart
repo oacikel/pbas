@@ -2,12 +2,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:pbas/helper/MapHelper.dart';
 import 'package:pbas/model/Post.dart';
+import 'package:pbas/screens/MapScreen/StoryControlWidget.dart';
 import "package:pbas/screens/MapScreen/StoryTile.dart";
 import 'package:pbas/model/CONSTANTS.dart' as CONTANTS;
 import 'dart:async';
 import 'package:geolocator/geolocator.dart';
 import 'package:pbas/model/Story.dart';
+import 'package:pbas/helper/MapHelper.dart';
 
 
 class MapScreen extends StatefulWidget {
@@ -20,10 +23,6 @@ class MapScreen extends StatefulWidget {
 
 class _MapScreenState extends State<MapScreen> {
   static String LOG_TAG ="OCULCAN - MapScreen: ";
-  static LatLng _initialPosition;
-  static  LatLng _lastMapPosition = _initialPosition;
-  PolylinePoints polyLinePoints;
-  List<LatLng> polyLineCoordinates = [];
   GoogleMapController mapController;
   List<Marker> allMarkers = [];
   Map<PolylineId, Polyline> polyLines = {};
@@ -32,17 +31,17 @@ class _MapScreenState extends State<MapScreen> {
   @override
   void initState () {
     //Add markers for each story point
-    widget.post.story.storyStops.forEach((position) {
+    widget.post.story.storyStops.forEach((storyPoint) {
       allMarkers.add(Marker(
           markerId: MarkerId("Test Marker"),
           draggable: false,
           onTap: () {
             print("Marker tapped");
           },
-          position: LatLng(position.latitude, position.longitude)));
+          position: LatLng(storyPoint.position.latitude, storyPoint.position.longitude)));
     });
     //Create polyline route for the first story stop
-    _createPolylines(widget.post.story);
+    _updatePolylines(widget.post.story);
   }
 
   @override
@@ -52,6 +51,7 @@ class _MapScreenState extends State<MapScreen> {
         body: Stack(
           children: <Widget>[
             GoogleMap(
+              padding:EdgeInsets.only(bottom:78),
               onMapCreated: _onMapCreated,
               markers: Set.from(allMarkers),
               myLocationEnabled: true,
@@ -76,6 +76,9 @@ class _MapScreenState extends State<MapScreen> {
 
                 )
             ),
+            Container(
+              alignment: Alignment.bottomCenter,
+                child:StoryControlWidget(widget.post))
 
           ],
         ));
@@ -83,48 +86,20 @@ class _MapScreenState extends State<MapScreen> {
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
+    mapController.setMapStyle(CONTANTS.googleMapStyle);
+    //mapController.setMapStyle('[{"featureType": "poi", "elementType": "labels", "stylers": [{ "visibility": "off" }]}]');
   }
 
-  _createPolylines(Story story) async {
+  _updatePolylines (Story story)async {
     // Initializing PolylinePoints
-    Position start = await GeolocatorPlatform.instance.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-    polyLinePoints = PolylinePoints();
-
-    // Generating the list of coordinates to be used for
-    // drawing the polylines
-    PolylineResult result = await polyLinePoints.getRouteBetweenCoordinates(
-      "AIzaSyBo1856P2UlN9JMzANp6A9GZkFo0Hecfyo", // Google Maps API Key
-      PointLatLng(start.latitude, start.longitude),
-      PointLatLng(story.storyStops[0].latitude, story.storyStops[0].longitude),
-      travelMode: TravelMode.transit,
-    );
-    debugPrint(LOG_TAG+"Results status: "+result.status);
-    debugPrint(LOG_TAG+"Results error message: "+result.errorMessage);
-    result.points.forEach((element) {
-      debugPrint(LOG_TAG+"resulting point latitude: "+element.latitude.toString());
-    });
-    // Adding the coordinates to the list
-    if (result.points.isNotEmpty) {
-      result.points.forEach((PointLatLng point) {
-        polyLineCoordinates.add(LatLng(point.latitude, point.longitude));
-      });
-    }
-
-    PolylineId id = PolylineId('poly');
-
-    // Initializing Polyline
-    Polyline polyline = Polyline(
-      polylineId: id,
-      color: Colors.red,
-      visible: true,
-      points: polyLineCoordinates,
-      width: 3,
-    );
-
-    // Adding the polyline to the map,
-    debugPrint(LOG_TAG+"Created Polyline: ");
-    polyLines[id] = polyline;
-    setState(() {
-    });
+     MapHelper.generatePaths(story)
+         .then((value) =>_replacePolylines(value));
   }
+
+    _replacePolylines(Map<PolylineId, Polyline>  value){
+    polyLines.clear();
+    setState(() {});
+    polyLines=value;
+    setState(() {});
+}
 }

@@ -27,9 +27,19 @@ class StoryTile extends StatelessWidget {
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                   child: Container(
                     alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                        image: DecorationImage(
+                          image: (NetworkImage(
+                              story.storyStops[order].imageLink)),
+
+                          fit: BoxFit.cover,
+                          alignment: Alignment.topCenter,
+                        ),
+                    ),
                     child: Text(
                       (order + 1).toString(),
-                      style: CONSTANTS.styleHugeFontBlack,),
+                      style: CONSTANTS.styleHugeFontWhite,),
                   )
             ),
               ),
