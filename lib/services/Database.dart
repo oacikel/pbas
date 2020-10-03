@@ -2,7 +2,7 @@ import "package:cloud_firestore/cloud_firestore.dart";
 import 'package:flutter/cupertino.dart';
 import "package:pbas/model/CONSTANTS.dart" as CONSTANTS;
 import "package:pbas/model/Post.dart";
-import 'package:pbas/model/StoryStop.dart';
+import 'package:pbas/model/Chapter.dart';
 import 'package:pbas/model/User.dart';
 import 'package:pbas/model/Story.dart';
 
@@ -64,15 +64,15 @@ List<Weight> weightData =
   mapData.entries.map( (entry) => Weight(entry.key, entry.value)).toList();
  */
   Story createStoryFromDoc(QueryDocumentSnapshot doc) {
-    List<StoryStop> storyStops=[];
+    List<Chapter> storyStops=[];
     debugPrint(LOG_TAG+"Adding a story to Post");
     List<Map> storyStopMaps =List.from(doc.data()[CONSTANTS.fieldNameStoryStops]);
     storyStopMaps.forEach((map) {
-      StoryStop storyStop=StoryStop.fromMap(map);
+      Chapter storyStop=Chapter.fromMap(map);
       storyStops.add(storyStop);
     });
     return Story(
-       storyStops:storyStops
+       chapters:storyStops
        );
   }
 }

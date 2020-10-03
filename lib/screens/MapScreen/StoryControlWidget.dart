@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:pbas/model/Post.dart';
-import "package:pbas/screens/MapScreen/StoryTile.dart";
+import "package:pbas/screens/MapScreen/ChapterTile.dart";
 import 'package:pbas/model/CONSTANTS.dart' as CONTANTS;
 import 'dart:async';
 import 'package:geolocator/geolocator.dart';
@@ -28,12 +28,12 @@ class StoryControlWidget extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Row(
             children: [
-              CircleAvatar(backgroundImage: NetworkImage(post.story.storyStops[0].imageLink),
+              CircleAvatar(backgroundImage: NetworkImage(post.story.chapters[0].imageLink),
             radius: 30,),
             Container(
               padding:EdgeInsets.all(8),
               alignment: Alignment.topLeft,
-              child: Text ("Hikayeye başlamak için ilk durağa gidin",
+              child: Text ("Başlamak için ilk durağa gidin!",
               style: CONTANTS.styleNormalFontBlack,),
             ),
               Expanded(

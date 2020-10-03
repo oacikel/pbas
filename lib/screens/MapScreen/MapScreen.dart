@@ -5,7 +5,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:pbas/helper/MapHelper.dart';
 import 'package:pbas/model/Post.dart';
 import 'package:pbas/screens/MapScreen/StoryControlWidget.dart';
-import "package:pbas/screens/MapScreen/StoryTile.dart";
+import "package:pbas/screens/MapScreen/ChapterTile.dart";
 import 'package:pbas/model/CONSTANTS.dart' as CONTANTS;
 import 'dart:async';
 import 'package:geolocator/geolocator.dart';
@@ -21,17 +21,18 @@ class MapScreen extends StatefulWidget {
   _MapScreenState createState() => _MapScreenState();
 }
 
-class _MapScreenState extends State<MapScreen> {
+class _MapScreenState extends State<MapScreen> with SingleTickerProviderStateMixin {
   static String LOG_TAG ="OCULCAN - MapScreen: ";
   GoogleMapController mapController;
   List<Marker> allMarkers = [];
   Map<PolylineId, Polyline> polyLines = {};
   final LatLng _center = const LatLng(40.98326, 29.040343);
-
+  Animation<Offset> offset;
+  AnimationController controller;
   @override
   void initState () {
     //Add markers for each story point
-    widget.post.story.storyStops.forEach((storyPoint) {
+    widget.post.story.chapters.forEach((storyPoint) {
       allMarkers.add(Marker(
           markerId: MarkerId("Test Marker"),
           draggable: false,
@@ -42,6 +43,11 @@ class _MapScreenState extends State<MapScreen> {
     });
     //Create polyline route for the first story stop
     _updatePolylines(widget.post.story);
+
+    //Animaion controller
+    controller = AnimationController(vsync: this, duration: Duration(milliseconds: 500));
+    offset = Tween<Offset>(begin: Offset(0.0,1.0), end: Offset(0.0, 0.0)).animate(controller);
+
   }
 
   @override
@@ -67,18 +73,33 @@ class _MapScreenState extends State<MapScreen> {
                 width: 80,
                 child: ListView.builder(
                   scrollDirection: Axis.vertical,
-                  itemCount: widget.post.story.storyStops.length,
+                  itemCount: widget.post.story.chapters.length,
                   itemBuilder: (context, index) {
-                    return StoryTile(
-                        story: widget.post.story,
-                        order: index);
+                    return GestureDetector(
+                      onTap:(){
+                        switch (controller.status) {
+                          case AnimationStatus.completed:
+                            controller.reverse();
+                            break;
+                          case AnimationStatus.dismissed:
+                            controller.forward();
+                            break;
+                          default:
+                        }
+                      },
+                      child: ChapterTile(
+                          story: widget.post.story,
+                          order: index),
+                    );
                   },
 
                 )
             ),
             Container(
               alignment: Alignment.bottomCenter,
-                child:StoryControlWidget(widget.post))
+                child:SlideTransition(
+                  position: offset,
+                    child: StoryControlWidget(widget.post)))
 
           ],
         ));

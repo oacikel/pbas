@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import "package:pbas/model/StoryStop.dart";
+import "package:pbas/model/Chapter.dart";
 
 class Story {
-  final List<StoryStop> storyStops;
+  final List<Chapter> chapters;
   int maxReachedStoryStop;
 
   Story({
     this.maxReachedStoryStop=0,
-    this.storyStops,
+    this.chapters,
   });
 }
