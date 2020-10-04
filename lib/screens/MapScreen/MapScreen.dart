@@ -1,53 +1,58 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:pbas/helper/MapHelper.dart';
 import 'package:pbas/model/Post.dart';
 import 'package:pbas/screens/MapScreen/StoryControlWidget.dart';
 import "package:pbas/screens/MapScreen/ChapterTile.dart";
 import 'package:pbas/model/CONSTANTS.dart' as CONTANTS;
-import 'dart:async';
-import 'package:geolocator/geolocator.dart';
 import 'package:pbas/model/Story.dart';
-import 'package:pbas/helper/MapHelper.dart';
-
+import 'package:location/location.dart';
 
 class MapScreen extends StatefulWidget {
   final Post post;
+
   MapScreen({Key key, @required this.post}) : super(key: key);
 
   @override
   _MapScreenState createState() => _MapScreenState();
 }
 
-class _MapScreenState extends State<MapScreen> with SingleTickerProviderStateMixin {
-  static String LOG_TAG ="OCULCAN - MapScreen: ";
+class _MapScreenState extends State<MapScreen>
+    with SingleTickerProviderStateMixin {
+  static String LOG_TAG = "OCULCAN - MapScreen: ";
   GoogleMapController mapController;
   List<Marker> allMarkers = [];
   Map<PolylineId, Polyline> polyLines = {};
+  Location location;
   final LatLng _center = const LatLng(40.98326, 29.040343);
   Animation<Offset> offset;
   AnimationController controller;
+  LocationData currentLocation;
+
   @override
-  void initState () {
+  void initState() {
+    super.initState();
     //Add markers for each story point
-    widget.post.story.chapters.forEach((storyPoint) {
-      allMarkers.add(Marker(
-          markerId: MarkerId("Test Marker"),
-          draggable: false,
-          onTap: () {
-            print("Marker tapped");
-          },
-          position: LatLng(storyPoint.position.latitude, storyPoint.position.longitude)));
-    });
+    MapHelper.updateMarkerShapes(widget.post.story.chapters, allMarkers);
     //Create polyline route for the first story stop
-    _updatePolylines(widget.post.story);
+    MapHelper.setInitialLocation()
+        .then((value) => currentLocation = value)
+        .whenComplete(
+            () => _updatePolylines(widget.post.story, currentLocation));
+    location = new Location();
+    Stream<LocationData> locationData = location.onLocationChanged;
+    locationData.listen((LocationData location) {
+      currentLocation = location;
+      _updatePolylines(widget.post.story, currentLocation);
+      debugPrint(LOG_TAG + "Location changed");
+    });
 
     //Animaion controller
-    controller = AnimationController(vsync: this, duration: Duration(milliseconds: 500));
-    offset = Tween<Offset>(begin: Offset(0.0,1.0), end: Offset(0.0, 0.0)).animate(controller);
-
+    controller =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 300));
+    offset = Tween<Offset>(begin: Offset(0.0, 1.0), end: Offset(0.0, 0.0))
+        .animate(controller);
   }
 
   @override
@@ -57,7 +62,7 @@ class _MapScreenState extends State<MapScreen> with SingleTickerProviderStateMix
         body: Stack(
           children: <Widget>[
             GoogleMap(
-              padding:EdgeInsets.only(bottom:78),
+              padding: EdgeInsets.only(bottom: 78),
               onMapCreated: _onMapCreated,
               markers: Set.from(allMarkers),
               myLocationEnabled: true,
@@ -65,10 +70,9 @@ class _MapScreenState extends State<MapScreen> with SingleTickerProviderStateMix
               polylines: Set<Polyline>.of(polyLines.values),
               initialCameraPosition: CameraPosition(
                 target: _center,
-                zoom: 15.0,
+                zoom: 11.0,
               ),
             ),
-
             Container(
                 width: 80,
                 child: ListView.builder(
@@ -76,7 +80,7 @@ class _MapScreenState extends State<MapScreen> with SingleTickerProviderStateMix
                   itemCount: widget.post.story.chapters.length,
                   itemBuilder: (context, index) {
                     return GestureDetector(
-                      onTap:(){
+                      onTap: () {
                         switch (controller.status) {
                           case AnimationStatus.completed:
                             controller.reverse();
@@ -87,20 +91,15 @@ class _MapScreenState extends State<MapScreen> with SingleTickerProviderStateMix
                           default:
                         }
                       },
-                      child: ChapterTile(
-                          story: widget.post.story,
-                          order: index),
+                      child:
+                          ChapterTile(story: widget.post.story, order: index),
                     );
                   },
-
-                )
-            ),
+                )),
             Container(
-              alignment: Alignment.bottomCenter,
-                child:SlideTransition(
-                  position: offset,
-                    child: StoryControlWidget(widget.post)))
-
+                alignment: Alignment.bottomCenter,
+                child: SlideTransition(
+                    position: offset, child: StoryControlWidget(widget.post)))
           ],
         ));
   }
@@ -111,16 +110,19 @@ class _MapScreenState extends State<MapScreen> with SingleTickerProviderStateMix
     //mapController.setMapStyle('[{"featureType": "poi", "elementType": "labels", "stylers": [{ "visibility": "off" }]}]');
   }
 
-  _updatePolylines (Story story)async {
+  _updatePolylines(Story story, LocationData deviceLocation) async {
     // Initializing PolylinePoints
-     MapHelper.generatePaths(story)
-         .then((value) =>_replacePolylines(value));
+    MapHelper.generatePaths(story, deviceLocation)
+        .then((value) => _replacePolylines(value));
   }
 
-    _replacePolylines(Map<PolylineId, Polyline>  value){
+  _replacePolylines(Map<PolylineId, Polyline> value) {
     polyLines.clear();
     setState(() {});
-    polyLines=value;
-    setState(() {});
-}
+    polyLines = value;
+    value.forEach((key, value) {
+      debugPrint(LOG_TAG + value.points.length.toString());
+    });
+    //setState(() {});
+  }
 }

@@ -28,6 +28,7 @@ dependencies:
   permission_handler: ^5.0.1+1
   geolocator: ^6.0.0+4
   flutter_polyline_points: ^0.2.3
+  location: ^3.0.2
 
   flutter:
     sdk: flutter
