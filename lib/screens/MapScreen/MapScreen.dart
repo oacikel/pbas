@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:pbas/helper/MapHelper.dart';
 import 'package:pbas/model/Post.dart';
@@ -36,17 +37,11 @@ class _MapScreenState extends State<MapScreen>
     //Add markers for each story point
     MapHelper.updateMarkerShapes(widget.post.story.chapters, allMarkers);
     //Create polyline route for the first story stop
-    MapHelper.setInitialLocation()
-        .then((value) => currentLocation = value)
-        .whenComplete(
-            () => _updatePolylines(widget.post.story, currentLocation));
     location = new Location();
-    Stream<LocationData> locationData = location.onLocationChanged;
-    locationData.listen((LocationData location) {
-      currentLocation = location;
-      _updatePolylines(widget.post.story, currentLocation);
-      debugPrint(LOG_TAG + "Location changed");
-    });
+    location.getLocation()
+        .then((value) => currentLocation=value)
+        .whenComplete(() =>  _updatePolylines(widget.post.story, currentLocation));
+    _watchLocationChanges();
 
     //Animaion controller
     controller =
@@ -79,21 +74,7 @@ class _MapScreenState extends State<MapScreen>
                   scrollDirection: Axis.vertical,
                   itemCount: widget.post.story.chapters.length,
                   itemBuilder: (context, index) {
-                    return GestureDetector(
-                      onTap: () {
-                        switch (controller.status) {
-                          case AnimationStatus.completed:
-                            controller.reverse();
-                            break;
-                          case AnimationStatus.dismissed:
-                            controller.forward();
-                            break;
-                          default:
-                        }
-                      },
-                      child:
-                          ChapterTile(story: widget.post.story, order: index),
-                    );
+                    return ChapterTile(widget.post.story,index);
                   },
                 )),
             Container(
@@ -112,17 +93,27 @@ class _MapScreenState extends State<MapScreen>
 
   _updatePolylines(Story story, LocationData deviceLocation) async {
     // Initializing PolylinePoints
+    debugPrint(LOG_TAG+"Updating polylines.");
+
     MapHelper.generatePaths(story, deviceLocation)
         .then((value) => _replacePolylines(value));
   }
 
   _replacePolylines(Map<PolylineId, Polyline> value) {
-    polyLines.clear();
-    setState(() {});
     polyLines = value;
-    value.forEach((key, value) {
-      debugPrint(LOG_TAG + value.points.length.toString());
+    setState(() {});
+  }
+
+  _watchLocationChanges(){
+    Stream<LocationData> locationData = location.onLocationChanged;
+    locationData.listen((LocationData location) {
+      if(distanceBetween(location.latitude, location.longitude, currentLocation.latitude, currentLocation.longitude)>25){
+        debugPrint(LOG_TAG + "Location changed by "+
+            distanceBetween(location.latitude, location.longitude, currentLocation.latitude, currentLocation.longitude).floor().toString()
+            +"meters");
+        currentLocation = location;
+        _updatePolylines(widget.post.story, currentLocation);
+      }
     });
-    //setState(() {});
   }
 }
