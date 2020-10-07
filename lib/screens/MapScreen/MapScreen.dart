@@ -74,7 +74,29 @@ class _MapScreenState extends State<MapScreen>
                   scrollDirection: Axis.vertical,
                   itemCount: widget.post.story.chapters.length,
                   itemBuilder: (context, index) {
-                    return ChapterTile(widget.post.story,index);
+                    return GestureDetector(
+                    onTap: () {
+                      switch (controller.status) {
+                        case AnimationStatus.completed:
+                          controller.reverse();
+                          break;
+                        case AnimationStatus.dismissed:
+                          controller.forward();
+                          break;
+                        case AnimationStatus.forward:
+                          // TODO: Handle this case.
+                          break;
+                        case AnimationStatus.reverse:
+                          // TODO: Handle this case.
+                          break;
+                      }
+                    },
+
+                      child: ChapterTile(
+                        story: widget.post.story,
+                        order: index,
+                      ),
+                    );
                   },
                 )),
             Container(
