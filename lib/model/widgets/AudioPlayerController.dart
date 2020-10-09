@@ -19,7 +19,6 @@ class _AudioPlayerControllerState extends State<AudioPlayerController> {
   String _LOG_TAG ="OCULCAN - AudioPlayerController: ";
    AudioPlayer _audioPlayer=new AudioPlayer();
    Icon _playPauseIcon;
-   String _currentTime="";
    int _totalTime;
    String _totalTimeText;
    String _currentTimeText="00:00";
@@ -50,50 +49,60 @@ class _AudioPlayerControllerState extends State<AudioPlayerController> {
               padding: const EdgeInsets.only(left:8.0,right: 8.0),
               child: Row(
                 children: [
-                  CircleAvatar(backgroundImage: NetworkImage(widget.chapter.imageLink),
-                    radius: 40,),
-                  Padding(
-                    padding: const EdgeInsets.only(left:8.0, right:8.0),
+                  Container(
+                    width: 80,
+                    child: CircleAvatar(backgroundImage: NetworkImage(widget.chapter.imageLink),
+                      radius: 40,),
+                  ),
+                  Expanded(
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                      Text(widget.chapter.title,
-                      textAlign: TextAlign.left,),
-                      Container(height: 20,
-                        child: Row(
-                          children: [
-                            Text(_currentTimeText,
-                              style: CONSTANTS.styleNormalFontBlack,),
-                            Container(
-                              width: 150,
-                              child: Slider(value:_sliderPosition,
-                                  onChanged:(value){setState(() {});},
-                                  max: 11000,
-                                  min: 0,
-                              ),
-                            ),
-                            Text((_totalTimeText),
-                              style: CONSTANTS.styleNormalFontBlack,)
-                          ],),
-                      ),
                       Container(
+                        padding: const EdgeInsets.only(left: 8.0,right: 8.0),
                         child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            IconButton(
-                              icon: Icon(Icons.replay_30),
-                              iconSize: 30,
-                              onPressed: ((){}),
-                            ), IconButton(
-                              icon: Icon(_playPauseIcon.icon),
-                              iconSize: 30,
-                              onPressed: ((){_playOrPauseAudio(widget.chapter.audioLink);}),
-                            ),IconButton(
-                              icon: Icon(Icons.forward_30),
-                              iconSize: 30,
-                              onPressed: ((){}),
+                            Text(widget.chapter.title,
+                            style: CONSTANTS.styleBigFontBlack,
                             ),
+                            Row(
+                              children: [
+                                Text(_currentTimeText,
+                                style: CONSTANTS.styleNormalFontBlack,),
+                                Text("/",
+                                style: CONSTANTS.styleNormalFontBlack,),
+                                Text((_totalTimeText),
+                                style: CONSTANTS.styleNormalFontBlack,)],
+                            )
                           ],
                         ),
+                      ),
+                      Container(
+                        height: 10,
+                        child: Slider(value:_sliderPosition,
+                            max: _totalTime.toDouble(),
+                            min: 0,
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          IconButton(
+                            icon: Icon(Icons.replay_30),
+                            iconSize: 30,
+                            onPressed: ((){}),
+                          ), IconButton(
+                            icon: Icon(_playPauseIcon.icon),
+                            iconSize: 30,
+                            onPressed: ((){_playOrPauseAudio(widget.chapter.audioLink);}),
+                          ),IconButton(
+                            icon: Icon(Icons.forward_30),
+                            iconSize: 30,
+                            onPressed: ((){}),
+                          ),
+                        ],
                       )
                     ],),
                   ),
@@ -109,7 +118,6 @@ class _AudioPlayerControllerState extends State<AudioPlayerController> {
         _updateTotalAudioDuration();
         debugPrint(_LOG_TAG+"Playing audio.");
         _audioPlayer.play(widget.chapter.audioLink);
-
         break;
       case AudioPlayerState.STOPPED:
         _updateTotalAudioDuration();
@@ -185,7 +193,6 @@ class _AudioPlayerControllerState extends State<AudioPlayerController> {
    setState(() {
      _totalTimeText=_audioPlayer.duration.toString().substring(2,7);
      _totalTime=_audioPlayer.duration.inMilliseconds;
-
    });
    debugPrint(_LOG_TAG+"Total clip duration is: "+_totalTime.toString());
   }
