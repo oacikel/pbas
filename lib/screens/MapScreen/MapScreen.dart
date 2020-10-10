@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:pbas/helper/MapHelper.dart';
+import 'package:pbas/helper/StoryHelper.dart';
 import 'package:pbas/model/Post.dart';
 import 'package:pbas/model/widgets/AudioPlayerController.dart';
 import 'package:pbas/screens/MapScreen/StoryControlWidget.dart';
 import "package:pbas/screens/MapScreen/ChapterTile.dart";
-import 'package:pbas/model/CONSTANTS.dart' as CONTANTS;
+import 'package:pbas/model/CONSTANTS.dart' as CONSTANTS;
 import 'package:pbas/model/Story.dart';
 import 'package:location/location.dart';
 
@@ -37,16 +38,31 @@ class _MapScreenState extends State<MapScreen>
   @override
   void initState() {
     super.initState();
-    //Add markers for each story point
-    MapHelper.updateMarkerShapes(widget.post.story.chapters, allMarkers);
-    //Create polyline route for the first story stop
-    location = new Location();
-    location
-        .getLocation()
-        .then((value) => currentLocation = value)
-        .whenComplete(
-            () => _updatePolylines(widget.post.story, currentLocation));
-    _watchLocationChanges();
+    //Initialize Variables Here
+    location=new Location();
+    //Get Device Location => Set Chapter States => Initiate polylines
+    MapHelper.getDeviceLocation(location)
+        .then((value) => currentLocation=value)
+        .then((value) =>  StoryHelper.updateChapterStates(widget.post.story, currentLocation))
+        .then((value) => _updatePolylines(widget.post.story,currentLocation))
+    //Setup Marker Assets Then Initialize Markers For Each Chapter
+    .then((value) =>MapHelper.generateIconsForMarkers())
+    .then((value) =>  MapHelper.addMarkerToEachChapter(widget.post.story.chapters, allMarkers))
+    .whenComplete(() => setState((){}));
+    //Observe Changes In Location
+    location.onLocationChanged.listen((LocationData location) {
+      if (distanceBetween(location.latitude, location.longitude, currentLocation.latitude, currentLocation.longitude)>25) {
+        //Update Current Location
+        currentLocation = location;
+        //Update Polylines
+        _updatePolylines(widget.post.story, currentLocation);
+        //Update Chapter States
+        StoryHelper.updateChapterStates(widget.post.story, currentLocation);
+        //Update Markers On Map
+        MapHelper.addMarkerToEachChapter(widget.post.story.chapters, allMarkers);
+        //setState(() {});
+      }
+    });
 
     //Animaion controller
     controller =
@@ -55,16 +71,18 @@ class _MapScreenState extends State<MapScreen>
         .animate(controller);
     //Set Global Index
     globalIndex=0;
+    
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(),
         body: Stack(
           children: <Widget>[
             GoogleMap(
-              padding: EdgeInsets.only(bottom: googleMapsPadding),
+              padding: EdgeInsets.only(top:CONSTANTS.paddingAppBar,bottom: googleMapsPadding),
+              zoomControlsEnabled: false,
+              compassEnabled: false,
               onMapCreated: _onMapCreated,
               markers: Set.from(allMarkers),
               myLocationEnabled: true,
@@ -110,7 +128,6 @@ class _MapScreenState extends State<MapScreen>
                           }
                         } else {
                           //Different chapter tile has been tapped. Dismiss the current one (if present) and restart animation
-
                           setState(() {globalIndex = index;});
                           switch (controller.status) {
                             case AnimationStatus.completed:
@@ -157,39 +174,14 @@ class _MapScreenState extends State<MapScreen>
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
-    mapController.setMapStyle(CONTANTS.googleMapStyle);
+    mapController.setMapStyle(CONSTANTS.googleMapStyleSilver);
     //mapController.setMapStyle('[{"featureType": "poi", "elementType": "labels", "stylers": [{ "visibility": "off" }]}]');
   }
 
   _updatePolylines(Story story, LocationData deviceLocation) async {
-    // Initializing PolylinePoints
-    debugPrint(LOG_TAG + "Updating polylines.");
-
     MapHelper.generatePaths(story, deviceLocation)
-        .then((value) => _replacePolylines(value));
+        .then((value) => polyLines=value)
+        .whenComplete(() => setState((){}));
   }
 
-  _replacePolylines(Map<PolylineId, Polyline> value) {
-    polyLines = value;
-    setState(() {});
-  }
-
-  _watchLocationChanges() {
-    Stream<LocationData> locationData = location.onLocationChanged;
-    locationData.listen((LocationData location) {
-      if (distanceBetween(location.latitude, location.longitude,
-              currentLocation.latitude, currentLocation.longitude) >
-          25) {
-        debugPrint(LOG_TAG +
-            "Location changed by " +
-            distanceBetween(location.latitude, location.longitude,
-                    currentLocation.latitude, currentLocation.longitude)
-                .floor()
-                .toString() +
-            "meters");
-        currentLocation = location;
-        _updatePolylines(widget.post.story, currentLocation);
-      }
-    });
-  }
 }

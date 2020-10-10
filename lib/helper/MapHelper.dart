@@ -20,96 +20,113 @@ class MapHelper {
   static Location location;
   static LocationData currentLocation;
   static List<LatLng> polyLineCoordinates = [];
+  static BitmapDescriptor _iconMapMakerUnlocked;
+  static BitmapDescriptor _iconMapMakerNext;
+  static BitmapDescriptor _iconMapMakerCurrent;
+  static BitmapDescriptor _iconMapMakerLocked;
 
-  static updateMarkerShapes(List<Chapter> chapters, List<Marker> markers) {
-    //todo: buradaki markerları harita chapter durumuna göre değiştir
+  static Future generateIconsForMarkers() {
+    if (_iconMapMakerUnlocked == null) {
+      BitmapDescriptor.fromAssetImage(ImageConfiguration(size: Size(CONSTANTS.mapMarkerSize, CONSTANTS.mapMarkerSize)),
+          'assets/icons/icon_map_marker_unlocked.bmp')
+          .then((icon) {
+        _iconMapMakerUnlocked = icon;
+      });
+
+      BitmapDescriptor.fromAssetImage(ImageConfiguration(size: Size(CONSTANTS.mapMarkerSize, CONSTANTS.mapMarkerSize),
+      ),
+          'assets/icons/icon_map_marker_next.bmp')
+          .then((icon) {
+        _iconMapMakerNext = icon;
+      });
+
+      BitmapDescriptor.fromAssetImage(ImageConfiguration(size: Size(CONSTANTS.mapMarkerSize, CONSTANTS.mapMarkerSize)),
+          'assets/icons/icon_map_marker_current.bmp')
+          .then((icon) {
+        _iconMapMakerCurrent = icon;
+      });
+
+      BitmapDescriptor.fromAssetImage(ImageConfiguration(size: Size(CONSTANTS.mapMarkerSize, CONSTANTS.mapMarkerSize)),
+          'assets/icons/icon_map_marker_locked.bmp')
+          .then((icon) {
+        _iconMapMakerLocked = icon;
+      });
+    }
+  }
+
+  static addMarkerToEachChapter(List<Chapter> chapters, List<Marker>markers) {
+    markers.clear();
     chapters.forEach((chapter) {
-      markers.add(Marker(
-          markerId: MarkerId("MARKER-" + chapter.title),
-          draggable: false,
-          onTap: () {},
-          position:
-              LatLng(chapter.position.latitude, chapter.position.longitude)));
+      switch (chapter.status) {
+        case eChapterStatus.UNLOCKED:
+          markers.add(
+              _createMarkerWihCustomIcon(chapter, _iconMapMakerUnlocked));
+          break;
+        case eChapterStatus.CURRENT:
+          markers.add(
+              _createMarkerWihCustomIcon(chapter, _iconMapMakerCurrent));
+          break;
+        case eChapterStatus.NEXT:
+          markers.add(_createMarkerWihCustomIcon(chapter, _iconMapMakerNext));
+          break;
+        case eChapterStatus.LOCKED:
+          markers.add(_createMarkerWihCustomIcon(chapter, _iconMapMakerLocked));
+          break;
+      }
     });
   }
-
-  static Future<LocationData> setInitialLocation() async {
-    // set the initial location by pulling the user's
-    // current location from the location's getLocation()
-    currentLocation = await location.getLocation();
-    return currentLocation;
+  static Marker _createMarkerWihCustomIcon(Chapter chapter,
+      BitmapDescriptor icon) {
+    return Marker(
+        markerId: MarkerId("MARKER-" + chapter.title),
+        icon: icon,
+        draggable: false,
+        onTap: () {},
+        position:
+        LatLng(chapter.position.latitude, chapter.position.longitude));
   }
 
-  static Future<Map<PolylineId, Polyline>> generatePaths(
-      Story story, LocationData currentLocation) async {
+  static Future<LocationData> getDeviceLocation(Location location) {
+    return location.getLocation();
+  }
+
+  static Future<Map<PolylineId, Polyline>> generatePaths(Story story, LocationData currentLocation) async {
     Map<PolylineId, Polyline> polylines = {};
     List<Chapter> chapters = story.chapters;
     for (int index = 0; index < chapters.length; index++) {
-      if (story.maxReachedStoryStop > index) {
-        debugPrint(LOG_TAG +
-            "Chapter " +
-            (index + 1).toString() +
-            " has already been listened to");
-        chapters[index].status = eChapterStatus.PAST_AVAILABLE;
-        //Current storyStop has already been listened to
-      } else if (story.maxReachedStoryStop == index) {
         //Current story stop is the current chapter in the story
-        if (_isDeviceWithinStoryPointRange(currentLocation, chapters[index])) {
-          debugPrint(LOG_TAG +
-              "Chapter " +
-              (index + 1).toString() +
-              " is ready to be listened");
-          chapters[index].status = eChapterStatus.CURRENT_AVAILABLE;
-          //Chapter is ready to be listened
-        } else {
-          //Chapter is not within range
-          debugPrint(LOG_TAG +
-              "Chapter " +
-              (index + 1).toString() +
-              " is not within range. Adding a red polyline from device location");
-          chapters[index].status = eChapterStatus.CURRENT_UNAVAILABLE;
-          await _generatePathBetweenTwoPoints(index.toString() + "-red",
-                  Colors.red, currentLocation, chapters[index].position)
+        if (chapters[index].status==eChapterStatus.NEXT) {
+            await _generatePathBetweenTwoPoints(index.toString() + "next",
+              Colors.deepOrange, currentLocation, chapters[index].position)
+              .then((value) => _addPolylineToMap(polylines, value));
+        } else if (chapters[index].status==eChapterStatus.LOCKED) {
+            await _generatePathBetweenTwoPoints(
+              index.toString() + "locked",
+              CONSTANTS.darkColor,
+              chapters[index - 1].position,
+              chapters[index].position)
               .then((value) => _addPolylineToMap(polylines, value));
         }
-      } else if (story.maxReachedStoryStop < index) {
-        debugPrint(LOG_TAG +
-            "Chapter " +
-            (index + 1).toString() +
-            " is not yet available. Adding a grey polyline");
-        //Current story stop is not yet available
-        chapters[index].status = eChapterStatus.UPCOMING_UNAVAILABLE;
-        await _generatePathBetweenTwoPoints(
-                index.toString() + "-black",
-                Colors.white38,
-                chapters[index - 1].position,
-                chapters[index].position)
-            .then((value) => _addPolylineToMap(polylines, value));
-      }
-
-      //index++;
-
     }
-    //chapters.forEach((storyStop)async {});
-
     return polylines;
   }
 
-  static _addPolylineToMap(
-      Map<PolylineId, Polyline> polylines, Polyline value) {
+
+  static _addPolylineToMap(Map<PolylineId, Polyline> polylines,
+      Polyline value) {
     polylines.remove(value.polylineId);
     polylines.putIfAbsent(value.polylineId, () => value);
   }
 
-  static bool _isDeviceWithinStoryPointRange(
-      LocationData deviceLocation, Chapter storyStop) {
+  static bool isDeviceWithinStoryPointRange(LocationData deviceLocation, Chapter storyStop) {
+    debugPrint(LOG_TAG+"Location latitude is"+deviceLocation.longitude.toString());
     return (distanceBetween(deviceLocation.latitude, deviceLocation.longitude,
-            storyStop.position.latitude, storyStop.position.longitude) <
+        storyStop.position.latitude, storyStop.position.longitude) <
         CONSTANTS.range);
   }
 
-  static Future<Polyline> _generatePathBetweenTwoPoints(
-      String id, Color color, var start, var end) async {
+  static Future<Polyline> _generatePathBetweenTwoPoints(String id, Color color,
+      var start, var end) async {
     // Initializing PolylinePoints
     polylinePoints = PolylinePoints();
 
@@ -134,6 +151,8 @@ class MapHelper {
         color: color,
         visible: true,
         polylineId: PolylineId(id),
-        width: 3);
+        width: 4);
   }
+
 }
+

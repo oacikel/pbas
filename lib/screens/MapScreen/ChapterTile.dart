@@ -61,16 +61,16 @@ class ChapterTile extends StatelessWidget {
 
   IconData _generateIconAccordingToChapterState(Chapter chapter){
     switch(chapter.status){
-      case eChapterStatus.PAST_AVAILABLE:{
+      case eChapterStatus.UNLOCKED:{
       return (Icons.lock_open);
       }break;
-      case eChapterStatus.CURRENT_AVAILABLE:{
+      case eChapterStatus.CURRENT:{
         return (Icons.star);
       }break;
-      case eChapterStatus.CURRENT_UNAVAILABLE:{
+      case eChapterStatus.NEXT:{
         return (Icons.navigate_next);
       }break;
-      case eChapterStatus.UPCOMING_UNAVAILABLE:{
+      case eChapterStatus.LOCKED:{
         return (Icons.lock_outline);
       }break;
 

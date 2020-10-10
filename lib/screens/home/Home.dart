@@ -6,6 +6,7 @@ import 'package:pbas/services/Database.dart';
 import 'package:provider/provider.dart';
 import 'package:pbas/screens/home/PostList.dart';
 import 'package:pbas/model/Post.dart';
+import  'package:pbas/model/CONSTANTS.dart' as CONSTANTS;
 
 
 
@@ -22,16 +23,17 @@ class _HomeState extends State<Home> {
     return StreamProvider<List<Post>>.value(
       value: DatabaseService().posts,
       child: Scaffold(
-        appBar: AppBar(
+        body: Padding(
+          padding: const EdgeInsets.only(top: CONSTANTS.paddingAppBar),
+          child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[Container(
+                  height: MediaQuery
+                      .of(context)
+                      .size
+                      .height / 2.0,
+                  child: PostList())]),
         ),
-        body: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[Container(
-                height: MediaQuery
-                    .of(context)
-                    .size
-                    .height / 2.0,
-                child: PostList())]),
         
       ),
     );

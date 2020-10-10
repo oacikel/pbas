@@ -55,6 +55,11 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+  assets:
+    - assets/icons/icon_map_marker_unlocked.bmp
+    - assets/icons/icon_map_marker_next.bmp
+    - assets/icons/icon_map_marker_current.bmp
+    - assets/icons/icon_map_marker_locked.bmp
 
   # To add assets to your application, add an assets section, like this:
   # assets:
