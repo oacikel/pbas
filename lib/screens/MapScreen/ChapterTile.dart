@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:blurrycontainer/blurrycontainer.dart';
 import "package:flutter/material.dart";
 import 'package:pbas/Repository/Repository.dart';
 import 'package:pbas/model/Chapter.dart';
@@ -57,16 +58,15 @@ class ChapterTile extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(left:4.0,top:4),
                 child: ClipRect(
-                  child: BackdropFilter(
-                    filter:_isChapterToBeBlurred()?
-                    ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0):
-                    ImageFilter.blur(sigmaX: 0,sigmaY: 0),
-                    child: Container(
+                  child: BlurryContainer(
+                    borderRadius: BorderRadius.circular(37),
+                    blur: _isChapterToBeBlurred()?
+                    2:0,
+                    child:Container(
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
-                        shape: BoxShape.circle),
-                      child:Text(" "),
-                    ),
+                          shape: BoxShape.circle),
+                    )
                   ),
                 ),
               )

@@ -12,18 +12,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6b8cb4c9-c5be-468c-ac45-b52c608487c4" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/lib/Repository/Repository.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/model/enums/eChapterFocusStatus.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins-dependencies" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/helper/MapHelper.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/helper/MapHelper.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/helper/StoryHelper.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/helper/StoryHelper.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/model/Chapter.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/model/Chapter.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/model/eChapterStatus.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/model/enums/eChapterAccessStatus.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/model/widgets/FabWithIcons.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/model/widgets/FABWithChapters.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/screens/MapScreen/ChapterTile.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/screens/MapScreen/ChapterTile.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/screens/MapScreen/MapScreen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/screens/MapScreen/MapScreen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -216,11 +206,6 @@
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="Dart">
-          <url>file://$PROJECT_DIR$/lib/model/widgets/AudioPlayerController.dart</url>
-          <line>169</line>
-          <option name="timeStamp" value="19" />
-        </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="Dart">
           <url>file://$PROJECT_DIR$/lib/helper/MapHelper.dart</url>
           <line>57</line>
