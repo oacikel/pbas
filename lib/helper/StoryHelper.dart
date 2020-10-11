@@ -6,7 +6,7 @@ import 'package:pbas/model/Chapter.dart';
 import 'package:pbas/model/Post.dart';
 import 'package:pbas/model/CONSTANTS.dart' as CONSTANTS;
 import 'package:pbas/model/Story.dart';
-import 'package:pbas/model/eChapterStatus.dart';
+import 'package:pbas/model/enums/eChapterAccessStatus.dart';
 import 'package:pbas/helper/MapHelper.dart';
 
 class StoryHelper {
@@ -16,19 +16,19 @@ class StoryHelper {
     for (int index = 0; index < chapters.length; index++) {
       if (story.maxReachedStoryStop > index) {
         //This chapter has already been listened to
-        chapters[index].status = eChapterStatus.UNLOCKED;
+        chapters[index].accessStatus = eChapterAccessStatus.UNLOCKED;
       } else if (story.maxReachedStoryStop == index) {
         //Current story stop is the current chapter in the story
         if (MapHelper.isDeviceWithinStoryPointRange(currentLocation, chapters[index])) {
           //Chapter is ready to be listened
-          chapters[index].status = eChapterStatus.CURRENT;
+          chapters[index].accessStatus = eChapterAccessStatus.CURRENT;
         } else {
           //Chapter is not within range
-          chapters[index].status = eChapterStatus.NEXT;
+          chapters[index].accessStatus = eChapterAccessStatus.NEXT;
         }
       } else if (story.maxReachedStoryStop < index) {
         //Current story stop is not yet available
-        chapters[index].status = eChapterStatus.LOCKED;
+        chapters[index].accessStatus = eChapterAccessStatus.LOCKED;
       }
     }
   }

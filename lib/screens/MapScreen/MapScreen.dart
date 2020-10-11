@@ -2,10 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:pbas/Repository/Repository.dart';
 import 'package:pbas/helper/MapHelper.dart';
 import 'package:pbas/helper/StoryHelper.dart';
 import 'package:pbas/model/Post.dart';
+import 'package:pbas/model/enums/eChapterAccessStatus.dart';
 import 'package:pbas/model/widgets/AudioPlayerController.dart';
+import 'package:pbas/model/widgets/FABWithChapters.dart';
 import 'package:pbas/screens/MapScreen/StoryControlWidget.dart';
 import "package:pbas/screens/MapScreen/ChapterTile.dart";
 import 'package:pbas/model/CONSTANTS.dart' as CONSTANTS;
@@ -34,6 +37,7 @@ class _MapScreenState extends State<MapScreen>
   LocationData currentLocation;
   int globalIndex;
   double googleMapsPadding=0;
+  Repository repository=Repository();
 
   @override
   void initState() {
@@ -100,60 +104,62 @@ class _MapScreenState extends State<MapScreen>
                   itemCount: widget.post.story.chapters.length,
                   itemBuilder: (context, index) {
                     return GestureDetector(
-                      onTap: () {
-                        if (globalIndex == index) {
-                          //Same chapter tile has been tapped just dismiss it if present or present it if not visible
-                          setState(() {});
-                          switch (controller.status) {
-                            case AnimationStatus.completed:
-                              debugPrint(LOG_TAG + "Animation completed");
-                              controller.reverse();
-                              googleMapsPadding=0.0;
-                              setState(() {});
-                              break;
-                            case AnimationStatus.dismissed:
-                              debugPrint(LOG_TAG + "Animation dismissed");
-                              googleMapsPadding=104.0;
-                              controller.forward();
-                              setState(() {});
-                              break;
-                            case AnimationStatus.forward:
-                              debugPrint(LOG_TAG + "Animation forward");
+                      onTap:() {
+                        debugPrint(LOG_TAG+"Chapter "+(index+1).toString()+" status is "+widget.post.story.chapters[index].accessStatus.toString());
+                        if( widget.post.story.chapters[index].accessStatus==eChapterAccessStatus.CURRENT ||
+                            widget.post.story.chapters[index].accessStatus==eChapterAccessStatus.UNLOCKED){
+                          repository.selectedChapterIndex=index;
+                          if (globalIndex == index) {
+                            //Same chapter tile has been tapped just dismiss it if present or present it if not visible
+                            switch (controller.status) {
+                              case AnimationStatus.completed:
+                                debugPrint(LOG_TAG + "Animation completed");
+                                controller.reverse();
+                                googleMapsPadding=0.0;
+                                break;
+                              case AnimationStatus.dismissed:
+                                debugPrint(LOG_TAG + "Animation dismissed");
+                                googleMapsPadding=104.0;
+                                controller.forward();
+                                break;
+                              case AnimationStatus.forward:
+                                debugPrint(LOG_TAG + "Animation forward");
+                                // TODO: Handle this case.
+                                break;
+                              case AnimationStatus.reverse:
+                                debugPrint(LOG_TAG + "Animation reverse");
+                                // TODO: Handle this case.
+                                break;
+                            }
+                            setState(() {});
+                          } else {
+                            //Different chapter tile has been tapped. Dismiss the current one (if present) and restart animation
+                            globalIndex = index;
+                            switch (controller.status) {
+                              case AnimationStatus.completed:
+                                googleMapsPadding=104.0;
+                                controller
+                                    .reverse()
+                                    .whenComplete(() => controller.forward());
+                                break;
+                              case AnimationStatus.dismissed:
+                                googleMapsPadding=104.0;
+                                controller.forward();
+                                break;
+                              case AnimationStatus.forward:
                               // TODO: Handle this case.
-                              break;
-                            case AnimationStatus.reverse:
-                              debugPrint(LOG_TAG + "Animation reverse");
+                                break;
+                              case AnimationStatus.reverse:
                               // TODO: Handle this case.
-                              break;
+                                break;
+                            }
+                            setState(() {});
                           }
-                        } else {
-                          //Different chapter tile has been tapped. Dismiss the current one (if present) and restart animation
-                          setState(() {globalIndex = index;});
-                          switch (controller.status) {
-                            case AnimationStatus.completed:
-                              googleMapsPadding=104.0;
-                              controller
-                                  .reverse()
-                                  .whenComplete(() => controller.forward());
-                              setState(() {});
-                              break;
-                            case AnimationStatus.dismissed:
-                              googleMapsPadding=104.0;
-                              controller.forward();
-                              setState(() {});
-                              break;
-                            case AnimationStatus.forward:
-                              // TODO: Handle this case.
-                              break;
-                            case AnimationStatus.reverse:
-                              // TODO: Handle this case.
-                              break;
-                          }
-                        }
 
-                        debugPrint(LOG_TAG +
-                            "Global index is: " +
-                            globalIndex.toString());
+                          debugPrint(LOG_TAG +
+                              "Global index is: " +
+                              globalIndex.toString());
+                        }
                       },
                       child: ChapterTile(
                         story: widget.post.story,
@@ -175,7 +181,6 @@ class _MapScreenState extends State<MapScreen>
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
     mapController.setMapStyle(CONSTANTS.googleMapStyleSilver);
-    //mapController.setMapStyle('[{"featureType": "poi", "elementType": "labels", "stylers": [{ "visibility": "off" }]}]');
   }
 
   _updatePolylines(Story story, LocationData deviceLocation) async {

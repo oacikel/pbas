@@ -30,6 +30,7 @@ dependencies:
   flutter_polyline_points: ^0.2.3
   location: ^3.0.2
   audioplayer: ^0.8.1
+  blurrycontainer: ^0.0.1
 
   flutter:
     sdk: flutter

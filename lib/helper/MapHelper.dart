@@ -10,7 +10,7 @@ import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:async';
 import 'package:geolocator/geolocator.dart';
-import 'package:pbas/model/eChapterStatus.dart';
+import 'package:pbas/model/enums/eChapterAccessStatus.dart';
 import 'package:location/location.dart';
 
 class MapHelper {
@@ -57,19 +57,19 @@ class MapHelper {
   static addMarkerToEachChapter(List<Chapter> chapters, List<Marker>markers) {
     markers.clear();
     chapters.forEach((chapter) {
-      switch (chapter.status) {
-        case eChapterStatus.UNLOCKED:
+      switch (chapter.accessStatus) {
+        case eChapterAccessStatus.UNLOCKED:
           markers.add(
               _createMarkerWihCustomIcon(chapter, _iconMapMakerUnlocked));
           break;
-        case eChapterStatus.CURRENT:
+        case eChapterAccessStatus.CURRENT:
           markers.add(
               _createMarkerWihCustomIcon(chapter, _iconMapMakerCurrent));
           break;
-        case eChapterStatus.NEXT:
+        case eChapterAccessStatus.NEXT:
           markers.add(_createMarkerWihCustomIcon(chapter, _iconMapMakerNext));
           break;
-        case eChapterStatus.LOCKED:
+        case eChapterAccessStatus.LOCKED:
           markers.add(_createMarkerWihCustomIcon(chapter, _iconMapMakerLocked));
           break;
       }
@@ -95,11 +95,11 @@ class MapHelper {
     List<Chapter> chapters = story.chapters;
     for (int index = 0; index < chapters.length; index++) {
         //Current story stop is the current chapter in the story
-        if (chapters[index].status==eChapterStatus.NEXT) {
+        if (chapters[index].accessStatus==eChapterAccessStatus.NEXT) {
             await _generatePathBetweenTwoPoints(index.toString() + "next",
               Colors.deepOrange, currentLocation, chapters[index].position)
               .then((value) => _addPolylineToMap(polylines, value));
-        } else if (chapters[index].status==eChapterStatus.LOCKED) {
+        } else if (chapters[index].accessStatus==eChapterAccessStatus.LOCKED) {
             await _generatePathBetweenTwoPoints(
               index.toString() + "locked",
               CONSTANTS.darkColor,

@@ -1,4 +1,4 @@
-enum eChapterStatus {
+enum eChapterAccessStatus {
 //Possible states of chapters
   UNLOCKED,
   CURRENT,
