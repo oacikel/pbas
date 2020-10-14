@@ -172,7 +172,8 @@ class _MapScreenState extends State<MapScreen>
               alignment: Alignment.bottomCenter,
               child: SlideTransition(
                   position: offset,
-                  child: AudioPlayerController(widget.post.story.chapters[globalIndex])),
+                  child: AudioPlayerController(widget.post.story,globalIndex),
+            )
             )
           ],
         ));

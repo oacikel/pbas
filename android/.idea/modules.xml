@@ -2,8 +2,18 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/android.iml" filepath="$PROJECT_DIR$/android.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/android.iml" filepath="$PROJECT_DIR$/.idea/android.iml" group="android" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/app.iml" group="android/app" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/331284876/audioplayer.iml" filepath="$PROJECT_DIR$/.idea/modules/331284876/audioplayer.iml" group="android/audioplayer" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/116269235/cloud_firestore.iml" filepath="$PROJECT_DIR$/.idea/modules/116269235/cloud_firestore.iml" group="android/cloud_firestore" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-2004237737/firebase_auth.iml" filepath="$PROJECT_DIR$/.idea/modules/-2004237737/firebase_auth.iml" group="android/firebase_auth" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-1527503090/firebase_core.iml" filepath="$PROJECT_DIR$/.idea/modules/-1527503090/firebase_core.iml" group="android/firebase_core" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/962669788/flutter_plugin_android_lifecycle.iml" filepath="$PROJECT_DIR$/.idea/modules/962669788/flutter_plugin_android_lifecycle.iml" group="android/flutter_plugin_android_lifecycle" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-1971585162/geolocator.iml" filepath="$PROJECT_DIR$/.idea/modules/-1971585162/geolocator.iml" group="android/geolocator" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/1073014821/google_maps_flutter.iml" filepath="$PROJECT_DIR$/.idea/modules/1073014821/google_maps_flutter.iml" group="android/google_maps_flutter" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-1920130276/location.iml" filepath="$PROJECT_DIR$/.idea/modules/-1920130276/location.iml" group="android/location" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/1576141625/permission.iml" filepath="$PROJECT_DIR$/.idea/modules/1576141625/permission.iml" group="android/permission" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-778106200/permission_handler.iml" filepath="$PROJECT_DIR$/.idea/modules/-778106200/permission_handler.iml" group="android/permission_handler" />
     </modules>
   </component>
 </project>

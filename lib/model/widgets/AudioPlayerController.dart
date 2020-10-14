@@ -6,10 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:pbas/model/CONSTANTS.dart' as CONSTANTS;
 
 import '../Chapter.dart';
+import '../Story.dart';
 
 class AudioPlayerController extends StatefulWidget {
-   Chapter chapter;
-   AudioPlayerController(this.chapter);
+   Story story;
+   int order;
+   AudioPlayerController(this.story, this.order);
 
   @override
   _AudioPlayerControllerState createState() => _AudioPlayerControllerState();
@@ -23,7 +25,6 @@ class _AudioPlayerControllerState extends State<AudioPlayerController> {
    String _totalTimeText;
    String _currentTimeText="00:00";
    double _sliderPosition;
-   Stream _audioPlayerStateStream;
 
   @override
   void initState() {
@@ -51,7 +52,7 @@ class _AudioPlayerControllerState extends State<AudioPlayerController> {
                 children: [
                   Container(
                     width: 80,
-                    child: CircleAvatar(backgroundImage: NetworkImage(widget.chapter.imageLink),
+                    child: CircleAvatar(backgroundImage: NetworkImage(widget.story.chapters[widget.order].imageLink),
                       radius: 40,),
                   ),
                   Expanded(
@@ -64,7 +65,7 @@ class _AudioPlayerControllerState extends State<AudioPlayerController> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(widget.chapter.title,
+                            Text(widget.story.chapters[widget.order].title,
                             style: CONSTANTS.styleBigFontBlack,
                             ),
                             Row(
@@ -96,7 +97,7 @@ class _AudioPlayerControllerState extends State<AudioPlayerController> {
                           ), IconButton(
                             icon: Icon(_playPauseIcon.icon),
                             iconSize: 30,
-                            onPressed: ((){_playOrPauseAudio(widget.chapter.audioLink);}),
+                            onPressed: ((){_playOrPauseAudio(widget.story.chapters[widget.order].audioLink);}),
                           ),IconButton(
                             icon: Icon(Icons.forward_30),
                             iconSize: 30,
@@ -113,16 +114,21 @@ class _AudioPlayerControllerState extends State<AudioPlayerController> {
         );
   }
   void _playOrPauseAudio(String url){
+    //Update most reached chapter number first:
+
+    if(widget.story.maxReachedStoryStop<=widget.order){
+      setState(() {widget.story.maxReachedStoryStop=widget.order+1;});
+    }
     switch (_audioPlayer.state){
       case AudioPlayerState.PAUSED:
         _updateTotalAudioDuration();
         debugPrint(_LOG_TAG+"Playing audio.");
-        _audioPlayer.play(widget.chapter.audioLink);
+        _audioPlayer.play(widget.story.chapters[widget.order].audioLink);
         break;
       case AudioPlayerState.STOPPED:
         _updateTotalAudioDuration();
         debugPrint(_LOG_TAG+"Playing audio.");
-        _audioPlayer.play(widget.chapter.audioLink);
+        _audioPlayer.play(widget.story.chapters[widget.order].audioLink);
         break;
       case AudioPlayerState.PLAYING:
         _audioPlayer.pause();
@@ -131,7 +137,7 @@ class _AudioPlayerControllerState extends State<AudioPlayerController> {
       case AudioPlayerState.COMPLETED:
         _updateTotalAudioDuration();
         debugPrint(_LOG_TAG+"Playing audio.");
-        _audioPlayer.play(widget.chapter.audioLink);
+        _audioPlayer.play(widget.story.chapters[widget.order].audioLink);
         break;
     }
 
