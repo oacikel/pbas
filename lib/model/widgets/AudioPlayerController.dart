@@ -3,10 +3,10 @@ import 'dart:async';
 import 'package:audioplayer/audioplayer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:pbas/model/CONSTANTS.dart' as CONSTANTS;
+import 'package:pbas/model/constants/CONSTANTS.dart' as CONSTANTS;
 
-import '../Chapter.dart';
-import '../Story.dart';
+import '../objects/Chapter.dart';
+import '../objects/Story.dart';
 
 class AudioPlayerController extends StatefulWidget {
    Story story;

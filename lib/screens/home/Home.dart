@@ -7,8 +7,8 @@ import 'package:pbas/screens/Home/PostTile.dart';
 import 'package:pbas/services/Database.dart';
 import 'package:provider/provider.dart';
 import 'package:pbas/screens/home/PostList.dart';
-import 'package:pbas/model/Post.dart';
-import  'package:pbas/model/CONSTANTS.dart' as CONSTANTS;
+import 'package:pbas/model/objects/Post.dart';
+import 'package:pbas/model/constants/CONSTANTS.dart' as CONSTANTS;
 
 
 

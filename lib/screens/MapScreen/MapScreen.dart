@@ -5,14 +5,14 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:pbas/Repository/Repository.dart';
 import 'package:pbas/helper/MapHelper.dart';
 import 'package:pbas/helper/StoryHelper.dart';
-import 'package:pbas/model/Post.dart';
+import 'package:pbas/model/objects/Post.dart';
 import 'package:pbas/model/enums/eChapterAccessStatus.dart';
 import 'package:pbas/model/widgets/AudioPlayerController.dart';
 import 'package:pbas/model/widgets/FABWithChapters.dart';
 import 'package:pbas/screens/MapScreen/StoryControlWidget.dart';
 import "package:pbas/screens/MapScreen/ChapterTile.dart";
-import 'package:pbas/model/CONSTANTS.dart' as CONSTANTS;
-import 'package:pbas/model/Story.dart';
+import 'package:pbas/model/constants/CONSTANTS.dart' as CONSTANTS;
+import 'package:pbas/model/objects/Story.dart';
 import 'package:location/location.dart';
 
 class MapScreen extends StatefulWidget {

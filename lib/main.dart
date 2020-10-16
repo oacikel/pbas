@@ -11,6 +11,7 @@ import 'package:pbas/screens/home/Home.dart';
 import 'package:pbas/screens/splashScreen/SplashScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
+import 'package:pbas/model/constants/THEME_ELEMENTS.dart' as THEME;
 
 
 void main() => runApp(MyApp());
@@ -27,6 +28,7 @@ class MyApp extends StatelessWidget {
         if (snapshot.hasError) {
           debugPrint('OCULCAN - Main: Error  initializing Firebase '+snapshot.error.toString());  debugPrint("OCULCAN - Main: Please wait");
           return MaterialApp(
+              theme: ThemeData(fontFamily: THEME.MAIN_FONT_NAME),
               title: "Error screen",
               home:ErrorScreen());
         }
@@ -35,10 +37,12 @@ class MyApp extends StatelessWidget {
         else if (snapshot.connectionState == ConnectionState.done) {
           debugPrint('OCULCAN - Main: Initializing HomeScreen');
           return MaterialApp(
+              theme: ThemeData(fontFamily: THEME.MAIN_FONT_NAME),
               title: 'Welcome to Flutter', home: Home());
         }else{
           debugPrint("OCULCAN - Main: Starting splash screen");
           return MaterialApp(
+            theme: ThemeData(fontFamily: THEME.MAIN_FONT_NAME),
             title: "Splash screen",
             home:SplashScreen());
         }

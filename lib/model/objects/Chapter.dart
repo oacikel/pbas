@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:pbas/model/CONSTANTS.dart' as CONSTANTS;
+import 'package:pbas/model/constants/CONSTANTS.dart' as CONSTANTS;
 import 'package:pbas/model/enums/eChapterAccessStatus.dart';
 import 'package:pbas/model/enums/eChapterFocusStatus.dart';
 

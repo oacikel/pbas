@@ -5,7 +5,7 @@ import 'package:english_words/english_words.dart';
 import 'package:pbas/services/Database.dart';
 import 'package:provider/provider.dart';
 import 'package:pbas/screens/home/PostList.dart';
-import 'package:pbas/model/Post.dart';
+import 'package:pbas/model/objects/Post.dart';
 
 
 

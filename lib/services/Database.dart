@@ -1,10 +1,10 @@
 import "package:cloud_firestore/cloud_firestore.dart";
 import 'package:flutter/cupertino.dart';
-import "package:pbas/model/CONSTANTS.dart" as CONSTANTS;
-import "package:pbas/model/Post.dart";
-import 'package:pbas/model/Chapter.dart';
-import 'package:pbas/model/User.dart';
-import 'package:pbas/model/Story.dart';
+import 'package:pbas/model/constants/CONSTANTS.dart' as CONSTANTS;
+import 'package:pbas/model/objects/Post.dart';
+import 'package:pbas/model/objects/Chapter.dart';
+import 'package:pbas/model/objects/User.dart';
+import 'package:pbas/model/objects/Story.dart';
 
 class DatabaseService {
   static String LOG_TAG ="OCULCAN - DATABASE: ";

@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:pbas/model/User.dart';
+import 'package:pbas/model/objects/User.dart';
 
 import 'Story.dart';
 

@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:pbas/model/Post.dart';
-import 'package:pbas/model/CONSTANTS.dart' as CONSTANTS;
+import 'package:pbas/model/objects/Post.dart';
+import 'package:pbas/model/constants/CONSTANTS.dart' as CONSTANTS;
 
 class DialogHelper {
   static Function showSelectedPostDialog(Post post, BuildContext context) {

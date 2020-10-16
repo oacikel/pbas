@@ -1,7 +1,10 @@
 import "package:flutter/material.dart";
-import "package:pbas/model/Post.dart";
-import "package:pbas/model/CONSTANTS.dart" as CONSTANTS;
+import 'package:pbas/model/objects/Post.dart';
+import 'package:pbas/model/constants/CONSTANTS.dart' as CONSTANTS;
+import 'package:pbas/model/constants/THEME_ELEMENTS.dart' as THEME;
 import 'package:pbas/helper/DialogHelper.dart';
+import 'package:pbas/model/widgets/TextAndIcon.dart';
+import 'package:pbas/model/widgets/IconAndText.dart';
 import 'package:pbas/screens/MapScreen/MapScreen.dart';
 import "package:permission_handler/permission_handler.dart";
 
@@ -16,115 +19,73 @@ class PostTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     this.context=context;
-    return Container(
-      width: MediaQuery
-          .of(context)
-          .size
-          .width / 1.75,
-      child: GestureDetector(
-        onTap:()=>DialogHelper.showSelectedPostDialog(post,context),
-        child: Card(
-            semanticContainer: true,
-            clipBehavior: Clip.antiAliasWithSaveLayer,
-            child: Container(
-              padding: EdgeInsets.all(5),
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: (NetworkImage(
-                        post.storyPhotoLink)),
-                    colorFilter: ColorFilter.mode(
-                        Colors.black54, BlendMode.darken),
-                    fit: BoxFit.fill,
-                    alignment: Alignment.topCenter,
-                  )
+    return GestureDetector(
+      onTap:()=>DialogHelper.showSelectedPostDialog(post,context),
+      child: Column(
+        children: [
+          Container(
+            height: THEME.CARD_HEIGHT,
+            width: THEME.CARD_WIDTH,
+            child: Card(
+                semanticContainer: true,
+                clipBehavior: Clip.antiAliasWithSaveLayer,
+                child: Image.network(
+                  post.storyPhotoLink,
+                  fit: BoxFit.cover),
               ),
-              child: Column(
-                //mainAxisAlignment:MainAxisAlignment.start,
-                children: <Widget>[
-                  Container(
-                    padding: EdgeInsets.only(bottom: 15),
-                    child: Text(post.title,
-                      style: CONSTANTS.styleBigFontWhite,),
-                  ),
-                  Container(
-                    alignment: Alignment.centerLeft,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                            child: CircleAvatar(
-                              backgroundImage: NetworkImage(
-                                post.user.userPictureLink),
-                              radius: 25,
-                            )
-                        )
-                        ,
-                        Container(
-                            child: Text(
-                              post.user.userName,
-                              textAlign: TextAlign.center,
-                              style: CONSTANTS.styleNormalFont,)
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  Expanded(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
+          ),
+          Container(
+            padding:EdgeInsets.only(left: 9,right: 4),
+            width: THEME.CARD_WIDTH,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
                         Expanded(
-                          flex: 2,
                           child: Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Row(children: [
-                                Icon(Icons.map,
-                                  size: (12),
-                                  color: Colors.white,),
-                                Text(post.travelDistanceInMeters.toString() +
-                                    " metre",
-                                  style: CONSTANTS.styleNormalFont,)
-                              ]),
-                              Row(children: [
-                                Icon(Icons.access_time,
-                                  size: (12),
-                                  color: Colors.white,),
-                                Text(post.estimatedTimeInMinutes.toString() +
-                                    " dakika",
-                                  textAlign: TextAlign.end,
-                                  style: CONSTANTS.styleNormalFont,)
-                              ],
-                              )
+                              Text(post.title,
+                              style: THEME.styleTitleDark,),
+                              Text(post.user.userName,
+                                style: THEME.styleSecondaryDark,)
                             ],
                           ),
                         ),
-                        Expanded(
-                          flex: 1,
-                          child: RaisedButton(
-                            onPressed: () {
-                              getSinglePermissionStatus().whenComplete(() => Navigator.push(context, MaterialPageRoute(builder: (context) => MapScreen(post: post,))));
-
-                            },
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(18.0)
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            IconAndText(
+                              icon: Icons.access_time,
+                              text: post.estimatedTimeInMinutes.toString()+THEME.textMinutes,
                             ),
-                            color: Colors.black12,
-                            child: (Text("Başla",
-                              style: CONSTANTS.styleNormalFont,)),
-                          ),
-                        )
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            )
-        ),
+                            IconAndText(
+                              icon: Icons.map,
+                              text: post.travelDistanceInMeters.toString()+THEME.textMeters,
+                            )
+                          ],
+                        ),
+                        ],
+            ),
+          ),
+        ],
       ),
     );
   }
+  /*
+  Container(
+                  padding: EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: (NetworkImage(
+                            post.storyPhotoLink)),
+                        colorFilter: ColorFilter.mode(
+                            Colors.black54, BlendMode.darken),
+                        fit: BoxFit.cover,
+                        alignment: Alignment.topCenter,
+                      )
+                  ),
+                )
+   */
 
   Future getSinglePermissionStatus() async {
     if (!await Permission.location.isGranted) {

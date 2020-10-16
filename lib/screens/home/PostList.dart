@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:pbas/model/Post.dart';
+import 'package:pbas/model/objects/Post.dart';
 import 'package:pbas/screens/home/PostTile.dart';
 
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pbas/screens/MapScreen/ChapterTile.dart';
 
-import '../Story.dart';
+import '../objects/Story.dart';
 
 class FABWithChapters extends StatefulWidget {
   FABWithChapters({this.story, this.onIconTapped});

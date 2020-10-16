@@ -2,9 +2,9 @@
 import 'package:flutter/cupertino.dart';
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:pbas/model/CONSTANTS.dart' as CONSTANTS;
-import 'package:pbas/model/Story.dart';
-import 'package:pbas/model/Chapter.dart';
+import 'package:pbas/model/constants/CONSTANTS.dart' as CONSTANTS;
+import 'package:pbas/model/objects/Story.dart';
+import 'package:pbas/model/objects/Chapter.dart';
 
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
