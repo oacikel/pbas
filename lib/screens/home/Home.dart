@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:english_words/english_words.dart';
+import 'package:pbas/Repository/Repository.dart';
+import 'package:pbas/model/objects/User.dart';
 import 'package:pbas/screens/Home/PostList.dart';
 import 'package:pbas/screens/Home/PostTile.dart';
 import 'package:pbas/services/Database.dart';
@@ -13,25 +15,28 @@ import 'package:pbas/model/constants/CONSTANTS.dart' as CONSTANTS;
 
 
 class Home extends StatefulWidget {
-
   @override
   _HomeState createState() => _HomeState();
 }
 
+
+
 class _HomeState extends State<Home> {
   final String LOG_TAG = "OCULCAN - HOME: ";
   DatabaseService databaseService=new DatabaseService();
-  List<Post>posts;
+  Repository repository = Repository();
+  User currentUser =new User();
 
 
   @override
   void initState() {
+    repository.currentUser=currentUser;
     databaseService.posts.listen((postList) {
-      posts=postList;
+      repository.totalPostList=postList;
       setState(() {});
       postList.forEach((post) {
         databaseService.updatePostWithUser(post)
-            .whenComplete(() => setState((){debugPrint(LOG_TAG+"Updated a new story");}));
+            .whenComplete(() => setState((){}));
       });
     });
   }
@@ -43,11 +48,22 @@ class _HomeState extends State<Home> {
         padding: const EdgeInsets.only(top: CONSTANTS.paddingAppBar),
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
-          itemCount: posts.length,
+          itemCount: repository.totalPostList.length,
             itemBuilder: (context,index){
             return Container(
-              child: PostTile(
-                post: posts[index],
+              child: GestureDetector(
+                onTap: (){
+                  if(repository.currentUser.focusedPost!=repository.totalPostList[index]){
+                    repository.currentUser.focusedPost=repository.totalPostList[index];
+                  }else{
+                    repository.currentUser.focusedPost=null;
+                  }
+                  setState(() {
+                  });
+                },
+                child: PostTile(
+                  post: repository.totalPostList[index],
+                ),
               ),
             );
         }),

@@ -1,5 +1,6 @@
 import 'package:blurrycontainer/blurrycontainer.dart';
 import "package:flutter/material.dart";
+import 'package:pbas/Repository/Repository.dart';
 import 'package:pbas/model/objects/Post.dart';
 import 'package:pbas/model/constants/CONSTANTS.dart' as CONSTANTS;
 import 'package:pbas/model/constants/THEME_ELEMENTS.dart' as THEME;
@@ -21,29 +22,37 @@ class PostTile extends StatefulWidget {
 
 class _PostTileState extends State<PostTile> {
   BuildContext context;
-
   String permissionStatusMessage;
+  Repository repository =Repository();
 
-  bool _isSwitch=true;
+  _setFocusedPost(){
+    //If user has already focused this post unfocus it
+    if (repository.currentUser.focusedPost!=null && repository.currentUser.focusedPost==widget.post){
+      repository.currentUser.focusedPost=null;
+    }
+    //If user has focused a different post set this one the new focused post
+    else if (repository.currentUser.focusedPost!=null && repository.currentUser.focusedPost!=widget.post){
+      repository.currentUser.focusedPost=widget.post;
+    }
+    //If user has not yet set a focused post set this one the new focused post
+    else if (repository.currentUser.focusedPost==null){
+      repository.currentUser.focusedPost=widget.post;
+    }
+    setState(() {});
+  }
 
-  switchUseCase(bool isSwitch){
-    isSwitch = !isSwitch;
-    setState(() {
-      _isSwitch=isSwitch;
-    });
+  bool _isFocused(){
+    return repository.currentUser.focusedPost!=widget.post;
   }
 
   @override
   Widget build(BuildContext context) {
     this.context=context;
-    return GestureDetector(
-      onTap:()=>{switchUseCase(_isSwitch),},
-      child: Padding(
-        padding: EdgeInsets.all(8),
-        child: AnimatedSwitcher(
-            duration:Duration(milliseconds:500 ),
-            child: _isSwitch? PostTileFirst(widget.post):PostTileSecond(widget.post)),
-      ),
+    return Padding(
+      padding: EdgeInsets.all(8),
+      child: AnimatedSwitcher(
+          duration:Duration(milliseconds:500 ),
+          child: _isFocused()? PostTileFirst(widget.post):PostTileSecond(widget.post)),
     );
   }
 

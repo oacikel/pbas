@@ -1,3 +1,4 @@
+import 'package:pbas/model/objects/Post.dart';
 import 'package:pbas/model/objects/User.dart';
 
 class Repository {
@@ -8,14 +9,16 @@ class Repository {
   Repository._internal();
 
   int _selectedChapterIndex;
-  User _thisUser;
-  int get selectedChapterIndex => _selectedChapterIndex;
-  set selectedChapterIndex(int value) {
-    _selectedChapterIndex = value;
-  }
+  User _currentUser;
+  List<Post> _totalPostList;
 
-  User get thisUser => _thisUser;
-  set thisUser(User value) {
-    _thisUser = value;
-  }
+
+  List<Post> get totalPostList => _totalPostList;
+  set totalPostList(List<Post> value) {_totalPostList = value;}
+
+  int get selectedChapterIndex => _selectedChapterIndex;
+  set selectedChapterIndex(int value) {_selectedChapterIndex = value;}
+
+  User get currentUser => _currentUser;
+  set currentUser(User value) {_currentUser = value;}
 }
