@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:pbas/model/constants/THEME_ELEMENTS.dart' as THEME;
 
-class TextAndIcon extends StatelessWidget {
+class TextAndIconLight extends StatelessWidget {
   final String text;
   final IconData icon;
   Color _iconColor;
-  TextAndIcon({Key key, this.text, this.icon}) : super(key: key);
+  TextAndIconLight({Key key, this.text, this.icon}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,11 +16,11 @@ class TextAndIcon extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(right:3.0),
           child: Text(text,
-              style:THEME.styleSecondaryDark,),
+              style:THEME.styleSecondaryLight,),
         ),
         Icon(icon,
           size: THEME.secondaryTextDimension,
-          color: iconColor==null? THEME.colorDark:iconColor,),
+          color: iconColor==null? THEME.colorLight:iconColor,),
       ],
     );
   }

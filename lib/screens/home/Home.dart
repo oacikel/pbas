@@ -41,23 +41,16 @@ class _HomeState extends State<Home> {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.only(top: CONSTANTS.paddingAppBar),
-        child: Container(
-            height: MediaQuery
-                .of(context)
-                .size
-                .height / 2.0,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: posts.length,
-                itemBuilder: (context,index){
-                return Container(
-                  height: 160,
-                  child: PostTile(
-                    post: posts[index],
-                  ),
-                );
-        })
-        ),
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: posts.length,
+            itemBuilder: (context,index){
+            return Container(
+              child: PostTile(
+                post: posts[index],
+              ),
+            );
+        }),
       ),
 
     );
