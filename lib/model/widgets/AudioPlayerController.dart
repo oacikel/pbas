@@ -2,8 +2,10 @@ import 'dart:async';
 
 import 'package:audioplayer/audioplayer.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pbas/model/constants/CONSTANTS.dart' as CONSTANTS;
+
 
 import '../objects/Chapter.dart';
 import '../objects/Story.dart';
@@ -11,7 +13,8 @@ import '../objects/Story.dart';
 class AudioPlayerController extends StatefulWidget {
    Story story;
    int order;
-   AudioPlayerController(this.story, this.order);
+   bool isPlayerRestart;
+   AudioPlayerController(this.story, this.order, this.isPlayerRestart);
 
   @override
   _AudioPlayerControllerState createState() => _AudioPlayerControllerState();
@@ -26,6 +29,7 @@ class _AudioPlayerControllerState extends State<AudioPlayerController> {
    String _currentTimeText="00:00";
    double _sliderPosition;
 
+
   @override
   void initState() {
     super.initState();
@@ -33,6 +37,16 @@ class _AudioPlayerControllerState extends State<AudioPlayerController> {
     _playPauseIcon=Icon(Icons.play_arrow);
     _sliderPosition=0;
     _setAudioPlayer();
+    ValueNotifier valueNotifier=new ValueNotifier(widget.isPlayerRestart);
+    valueNotifier.addListener(() {
+      if(widget.isPlayerRestart){
+        debugPrint(_LOG_TAG+"Restarting audioplayer");
+        _setAudioPlayer();
+      }else{
+        debugPrint(_LOG_TAG+"no change");
+      }
+    });
+    valueNotifier.notifyListeners();
   }
 
   @override
@@ -115,20 +129,21 @@ class _AudioPlayerControllerState extends State<AudioPlayerController> {
   }
   void _playOrPauseAudio(String url){
     //Update most reached chapter number first:
-
     if(widget.story.maxReachedStoryStop<=widget.order){
       setState(() {widget.story.maxReachedStoryStop=widget.order+1;});
     }
     switch (_audioPlayer.state){
       case AudioPlayerState.PAUSED:
         _updateTotalAudioDuration();
-        debugPrint(_LOG_TAG+"Playing audio.");
-        _audioPlayer.play(widget.story.chapters[widget.order].audioLink);
+        debugPrint(_LOG_TAG+"Playing audio of chapter "+(widget.order+1).toString());
+        debugPrint(_LOG_TAG+"url playing is "+url);
+        _audioPlayer.play(url);
         break;
       case AudioPlayerState.STOPPED:
         _updateTotalAudioDuration();
-        debugPrint(_LOG_TAG+"Playing audio.");
-        _audioPlayer.play(widget.story.chapters[widget.order].audioLink);
+        debugPrint(_LOG_TAG+"Playing audio of chapter "+(widget.order+1).toString());
+        debugPrint(_LOG_TAG+"url playing is "+url);
+        _audioPlayer.play(url);
         break;
       case AudioPlayerState.PLAYING:
         _audioPlayer.pause();
@@ -136,13 +151,15 @@ class _AudioPlayerControllerState extends State<AudioPlayerController> {
         break;
       case AudioPlayerState.COMPLETED:
         _updateTotalAudioDuration();
-        debugPrint(_LOG_TAG+"Playing audio.");
-        _audioPlayer.play(widget.story.chapters[widget.order].audioLink);
+        debugPrint(_LOG_TAG+"Playing audio of chapter "+(widget.order+1).toString());
+        debugPrint(_LOG_TAG+"url playing is "+url);
+        _audioPlayer.play(url);
         break;
     }
 
   }
   void _setAudioPlayer(){
+    _audioPlayer.stop();
     /**Update Total Duration*/
     _updateTotalAudioDuration();
     /**Observe AudioPlayer State Changes Here*/
@@ -156,7 +173,6 @@ class _AudioPlayerControllerState extends State<AudioPlayerController> {
      _setCurrentTimeText(duration);
     });
   }
-
   _setPlayerIcon(){
     switch(_audioPlayer.state){
 
@@ -189,7 +205,6 @@ class _AudioPlayerControllerState extends State<AudioPlayerController> {
   _setSliderPosition(Duration duration){
     setState(() { _sliderPosition=duration.inMilliseconds.toDouble();});
   }
-
   _setCurrentTimeText(Duration duration){
     setState(() {
       _currentTimeText=duration.toString().substring(2,7);

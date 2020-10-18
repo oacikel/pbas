@@ -38,6 +38,7 @@ class _MapScreenState extends State<MapScreen>
   int globalIndex;
   double googleMapsPadding=0;
   Repository repository=Repository();
+  bool isPlayerRestart=false;
 
   @override
   void initState() {
@@ -47,7 +48,7 @@ class _MapScreenState extends State<MapScreen>
     //Get Device Location => Set Chapter States => Initiate polylines
     MapHelper.getDeviceLocation(location)
         .then((value) => currentLocation=value)
-        .then((value) =>  StoryHelper.updateChapterStates(widget.post.story, currentLocation))
+        .then((value) =>  StoryHelper.updateChapterStates(widget.post, currentLocation))
         .then((value) => _updatePolylines(widget.post.story,currentLocation))
     //Setup Marker Assets Then Initialize Markers For Each Chapter
     .then((value) =>MapHelper.generateIconsForMarkers())
@@ -61,7 +62,7 @@ class _MapScreenState extends State<MapScreen>
         //Update Polylines
         _updatePolylines(widget.post.story, currentLocation);
         //Update Chapter States
-        StoryHelper.updateChapterStates(widget.post.story, currentLocation);
+        StoryHelper.updateChapterStates(widget.post, currentLocation);
         //Update Markers On Map
         MapHelper.addMarkerToEachChapter(widget.post.story.chapters, allMarkers);
         //setState(() {});
@@ -131,6 +132,7 @@ class _MapScreenState extends State<MapScreen>
                                 // TODO: Handle this case.
                                 break;
                             }
+                            isPlayerRestart=false;
                             setState(() {});
                           } else {
                             //Different chapter tile has been tapped. Dismiss the current one (if present) and restart animation
@@ -153,6 +155,7 @@ class _MapScreenState extends State<MapScreen>
                               // TODO: Handle this case.
                                 break;
                             }
+                            isPlayerRestart=true;
                             setState(() {});
                           }
 
@@ -172,7 +175,7 @@ class _MapScreenState extends State<MapScreen>
               alignment: Alignment.bottomCenter,
               child: SlideTransition(
                   position: offset,
-                  child: AudioPlayerController(widget.post.story,globalIndex),
+                  child: AudioPlayerController(widget.post.story,globalIndex,isPlayerRestart),
             )
             )
           ],

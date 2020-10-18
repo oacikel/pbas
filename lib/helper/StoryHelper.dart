@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
+import 'package:pbas/Repository/Repository.dart';
 import 'package:pbas/model/objects/Chapter.dart';
 import 'package:pbas/model/objects/Post.dart';
 import 'package:pbas/model/constants/CONSTANTS.dart' as CONSTANTS;
@@ -10,8 +11,10 @@ import 'package:pbas/model/enums/eChapterAccessStatus.dart';
 import 'package:pbas/helper/MapHelper.dart';
 
 class StoryHelper {
+  static Repository repository =Repository();
 
-  static updateChapterStates(Story story, LocationData currentLocation) {
+  static updateChapterStates(Post post, LocationData currentLocation) {
+    Story story=post.story;
     List<Chapter>chapters = story.chapters;
     for (int index = 0; index < chapters.length; index++) {
       if (story.maxReachedStoryStop > index) {

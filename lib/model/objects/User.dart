@@ -4,7 +4,7 @@ class User {
   final String userName;
   final String userPictureLink;
   Post _focusedPost;
-  Post _selectedPost;
+  Map <Post,int> _selectedPosts=new Map();
 
   User({
     this.userName,
@@ -17,9 +17,9 @@ class User {
     _focusedPost = value;
   }
 
-  Post get selectedPost => _selectedPost;
+  Map<Post, int> get selectedPosts => _selectedPosts;
 
-  set selectedPost(Post value) {
-    _selectedPost = value;
+  set selectedPosts(Map<Post,int> value) {
+    _selectedPosts = value;
   }
 }

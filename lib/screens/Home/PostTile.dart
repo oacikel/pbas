@@ -4,7 +4,6 @@ import 'package:pbas/Repository/Repository.dart';
 import 'package:pbas/model/objects/Post.dart';
 import 'package:pbas/model/constants/CONSTANTS.dart' as CONSTANTS;
 import 'package:pbas/model/constants/THEME_ELEMENTS.dart' as THEME;
-import 'package:pbas/helper/DialogHelper.dart';
 import 'package:pbas/model/widgets/IconAndTextDark.dart';
 import 'package:pbas/model/widgets/TextAndIconLight.dart';
 import 'package:pbas/model/widgets/IconAndTextLight.dart';
@@ -130,6 +129,7 @@ class PostTileFirst extends StatelessWidget {
 
 class PostTileSecond extends StatelessWidget {
   Post post;
+  Repository repository=Repository();
 
   PostTileSecond(this.post);
   @override
@@ -223,9 +223,15 @@ class PostTileSecond extends StatelessWidget {
                       Container(
                         child: SizedBox(
                           width: double.infinity,
-                          child: RaisedButton.icon(onPressed: ((){}),
+                          child: RaisedButton.icon(onPressed: ((){
+                            int returnZero(){return 0;}
+                            repository.currentUser.selectedPosts.putIfAbsent(post,() =>returnZero());
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => MapScreen(
+                              post: repository.currentUser.selectedPosts.keys.firstWhere((post) => this.post==post),
+                            )
+                            ));
+                          }),
                             highlightColor: THEME.primaryColor,
-
                             focusColor: THEME.primaryColor,
                             color: THEME.colorDark,
                             label: Text(THEME.textStart,style:THEME.styleTitleWhite,),

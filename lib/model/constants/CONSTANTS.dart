@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:pbas/screens/MapScreen/MapScreen.dart';
 
 //
-final int range =25;
+final int range =25000;
 
 //Style
 final styleBigFontWhite = TextStyle(fontSize: 18.0, color: Colors.white);
